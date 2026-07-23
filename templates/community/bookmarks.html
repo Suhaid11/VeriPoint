@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load veripoint_tags %}
+
+{% block title %}Saved Bookmarks — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container container-md py-8">
+
+  <div class="mb-8">
+    <h1 class="text-3xl font-extrabold mb-1">My Bookmarks</h1>
+    <p class="text-sm text-muted">Your saved businesses and proof-backed reviews for quick access.</p>
+  </div>
+
+  <div class="grid grid-cols-2 gap-6">
+    {% for bm in bookmarks %}
+      {% if bm.bookmark_type == 'business' and bm.business %}
+        <div class="card card-interactive p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="badge badge-primary">Saved Business</span>
+              <button class="btn btn-secondary btn-icon btn-bookmark bookmarked" data-type="business" data-id="{{ bm.business.id }}" title="Remove Bookmark">
+                <i data-lucide="bookmark-check" class="w-4 h-4 text-primary"></i>
+              </button>
+            </div>
+            <h3 class="text-xl font-bold mb-1">
+              <a href="{% url 'businesses:detail' slug=bm.business.slug %}">{{ bm.business.name }}</a>
+            </h3>
+            <p class="text-sm text-muted mb-4 line-clamp-2">{{ bm.business.short_description|default:bm.business.description|truncatewords:20 }}</p>
+          </div>
+          <div class="card-footer">
+            <span class="text-xs text-muted"><i data-lucide="map-pin" class="w-3.5 h-3.5 inline"></i> {{ bm.business.city }}</span>
+            <a href="{% url 'businesses:detail' slug=bm.business.slug %}" class="btn btn-outline btn-sm">View Business &rarr;</a>
+          </div>
+        </div>
+
+      {% elif bm.bookmark_type == 'review' and bm.review %}
+        <div class="card card-interactive p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="badge badge-accent">Saved Review</span>
+              <button class="btn btn-secondary btn-icon btn-bookmark bookmarked" data-type="review" data-id="{{ bm.review.id }}" title="Remove Bookmark">
+                <i data-lucide="bookmark-check" class="w-4 h-4 text-accent"></i>
+              </button>
+            </div>
+            <span class="text-xs text-muted mb-1 block">Review for <strong>{{ bm.review.business.name }}</strong></span>
+            <h3 class="text-lg font-bold mb-2">
+              <a href="{% url 'reviews:detail' pk=bm.review.pk %}">{{ bm.review.title }}</a>
+            </h3>
+            <p class="text-sm text-muted mb-4 line-clamp-2">{{ bm.review.body }}</p>
+          </div>
+          <div class="card-footer">
+            <span class="text-xs text-muted">By {{ bm.review.author.username }}</span>
+            <a href="{% url 'reviews:detail' pk=bm.review.pk %}" class="btn btn-outline btn-sm">View Review &rarr;</a>
+          </div>
+        </div>
+      {% endif %}
+    {% empty %}
+      <div class="col-span-2">
+        {% include 'components/empty_state.html' with icon="bookmark-x" title="No Saved Bookmarks" message="You haven't bookmarked any businesses or reviews yet. Click the bookmark icon on any business profile or review to save it here." action_url="/businesses/" action_text="Explore Businesses" %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% include 'components/pagination.html' %}
+
+</div>
+{% endblock %}

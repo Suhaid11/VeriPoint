@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load veripoint_tags %}
+
+{% block title %}{{ profile_user.username }}'s Profile — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container container-md py-8">
+
+  <!-- User Profile Header Card -->
+  <div class="card p-8 mb-8">
+    <div class="flex items-center gap-6">
+      <div class="avatar-container" style="width: 80px; height: 80px; border-radius: var(--radius-full); background-color: var(--primary-alpha-10); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: var(--primary);">
+        {% if profile_user.profile.avatar %}
+          <img src="{{ profile_user.profile.avatar.url }}" alt="{{ profile_user.username }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;">
+        {% else %}
+          {{ profile_user.username|slice:":1"|upper }}
+        {% endif %}
+      </div>
+
+      <div class="flex-1">
+        <div class="flex items-center gap-3 mb-1">
+          <h1 class="text-2xl font-bold mb-0">{{ profile_user.first_name }} {{ profile_user.last_name }}</h1>
+          <span class="text-sm text-muted">@{{ profile_user.username }}</span>
+          {% if reputation %}
+            <span class="badge {{ reputation.level|reputation_badge_color }}">{{ reputation.get_level_display }}</span>
+          {% endif %}
+        </div>
+
+        <p class="text-sm text-muted mb-3">{{ profile_user.profile.bio|default:"No bio provided yet." }}</p>
+
+        <div class="flex items-center gap-6 text-xs text-muted">
+          {% if profile_user.profile.location %}
+            <span><i data-lucide="map-pin" class="w-3.5 h-3.5 inline"></i> {{ profile_user.profile.location }}</span>
+          {% endif %}
+          {% if profile_user.profile.website %}
+            <span><i data-lucide="globe" class="w-3.5 h-3.5 inline"></i> <a href="{{ profile_user.profile.website }}" target="_blank" rel="noopener">{{ profile_user.profile.website }}</a></span>
+          {% endif %}
+          <span><i data-lucide="calendar" class="w-3.5 h-3.5 inline"></i> Joined {{ profile_user.date_joined|date:"M Y" }}</span>
+        </div>
+      </div>
+
+      {% if user == profile_user %}
+        <div>
+          <a href="{% url 'accounts:edit_profile' %}" class="btn btn-secondary btn-sm"><i data-lucide="edit"></i> Edit Profile</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- User Reviews List -->
+  <h3 class="mb-4">Reviews by {{ profile_user.username }}</h3>
+  <div class="flex flex-col gap-4">
+    {% for r in reviews %}
+      <div class="card p-6">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <span class="text-xs text-muted">Reviewed <a href="{% url 'businesses:detail' slug=r.business.slug %}" class="font-bold text-primary">{{ r.business.name }}</a></span>
+            <h4 class="mt-1"><a href="{% url 'reviews:detail' pk=r.pk %}">{{ r.title }}</a></h4>
+          </div>
+          {% if r.trust_score %}
+            <div class="trust-score-badge {{ r.trust_score.total_score|trust_score_color }}">
+              Score {{ r.trust_score.total_score }}
+            </div>
+          {% endif %}
+        </div>
+
+        <p class="text-sm text-muted mb-4 line-clamp-3">{{ r.body }}</p>
+
+        <div class="card-footer pt-3 mt-0">
+          <div class="flex gap-2">
+            {% for item in r.evidence_items.all %}
+              {% include 'components/evidence_badge.html' with evidence=item %}
+            {% endfor %}
+          </div>
+          <span class="text-xs text-muted">{{ r.created_at|short_timesince }}</span>
+        </div>
+      </div>
+    {% empty %}
+      <div class="card p-8 text-center text-muted">No reviews published yet.</div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

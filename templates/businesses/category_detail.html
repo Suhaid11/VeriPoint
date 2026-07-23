@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load veripoint_tags %}
+
+{% block title %}{{ category.name }} Businesses — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+
+  <div class="mb-8">
+    <a href="{% url 'businesses:categories' %}" class="text-xs text-muted font-semibold hover:text-primary">&larr; Back to Categories</a>
+    <div class="flex items-center gap-4 mt-2">
+      <div class="inline-flex p-3 rounded-full bg-primary-alpha-10 text-primary">
+        <i data-lucide="{{ category.icon|default:'folder' }}" class="w-8 h-8"></i>
+      </div>
+      <div>
+        <h1 class="text-3xl font-extrabold">{{ category.name }}</h1>
+        <p class="text-sm text-muted">{{ category.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-6">
+    {% for b in businesses %}
+      <div class="card card-interactive flex flex-col justify-between p-6">
+        <div>
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <span class="badge badge-neutral mb-2">{{ b.category.name }}</span>
+              <h3 class="text-xl font-bold mb-1">
+                <a href="{% url 'businesses:detail' slug=b.slug %}">{{ b.name }}</a>
+              </h3>
+            </div>
+            <div class="trust-score-circle {{ b.avg_trust_score|trust_score_color }}" title="Average Trust Score">
+              <span class="score-num">{{ b.avg_trust_score }}</span>
+              <span class="score-denom">/100</span>
+            </div>
+          </div>
+
+          <p class="text-sm text-muted mb-4 line-clamp-2">
+            {{ b.short_description|default:b.description|truncatewords:20 }}
+          </p>
+        </div>
+
+        <div class="card-footer">
+          <span class="text-xs text-muted"><i data-lucide="map-pin" class="w-3.5 h-3.5 inline"></i> {{ b.city }}</span>
+          <a href="{% url 'businesses:detail' slug=b.slug %}" class="btn btn-outline btn-sm">View Profile &rarr;</a>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-span-3">
+        {% include 'components/empty_state.html' with title="No Businesses in This Category" message="Be the first to list a business under this category." action_url="/businesses/create/" action_text="Add Business" %}
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

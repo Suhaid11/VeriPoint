@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load veripoint_tags %}
+
+{% block title %}Explore Verified Businesses — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+
+  <!-- Page Title & Header -->
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-extrabold mb-1">Explore Businesses</h1>
+      <p class="text-sm text-muted">Discover verified organizations rated by proof and credibility scores.</p>
+    </div>
+    {% if user.is_authenticated %}
+      <a href="{% url 'businesses:create' %}" class="btn btn-primary btn-sm">+ Add Business</a>
+    {% endif %}
+  </div>
+
+  <!-- Layout: Filter Sidebar & Listings Grid -->
+  <div class="layout-with-sidebar">
+
+    <!-- Filters Sidebar -->
+    <div class="card p-5">
+      <h4 class="mb-4 flex items-center gap-2">
+        <i data-lucide="filter" class="w-4 h-4 text-primary"></i> Filter Listings
+      </h4>
+
+      <form method="GET" action="{% url 'businesses:list' %}">
+        <!-- Search Keyword -->
+        <div class="form-group mb-4">
+          <label class="form-label">Search Keyword</label>
+          <input type="text" name="q" value="{{ search_query }}" placeholder="Name, description, city..." class="form-control">
+        </div>
+
+        <!-- Category -->
+        <div class="form-group mb-4">
+          <label class="form-label">Category</label>
+          <select name="category" class="form-control">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+              <option value="{{ cat.slug }}" {% if selected_category == cat.slug %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- City -->
+        <div class="form-group mb-4">
+          <label class="form-label">City</label>
+          <input type="text" name="city" value="{{ selected_city }}" placeholder="Filter by city..." class="form-control">
+        </div>
+
+        <!-- Sort By -->
+        <div class="form-group mb-4">
+          <label class="form-label">Sort By</label>
+          <select name="sort" class="form-control">
+            <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>Newest Added</option>
+            <option value="rating" {% if selected_sort == 'rating' %}selected{% endif %}>Highest Rating</option>
+            <option value="reviews" {% if selected_sort == 'reviews' %}selected{% endif %}>Most Reviews</option>
+            <option value="name" {% if selected_sort == 'name' %}selected{% endif %}>Name (A–Z)</option>
+          </select>
+        </div>
+
+        <!-- Verified Checkbox -->
+        <div class="form-group mb-6">
+          <label class="flex items-center gap-2 cursor-pointer text-sm">
+            <input type="checkbox" name="verified" value="1" {% if request.GET.verified == '1' %}checked{% endif %}>
+            <span>Verified Businesses Only</span>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-sm w-full mb-2">Apply Filters</button>
+        <a href="{% url 'businesses:list' %}" class="btn btn-secondary btn-sm w-full text-center">Reset Filters</a>
+      </form>
+    </div>
+
+    <!-- Listings Grid -->
+    <div>
+      <div class="grid grid-cols-2 gap-6">
+        {% for b in businesses %}
+          <div class="card card-interactive flex flex-col justify-between p-6">
+            <div>
+              <div class="flex justify-between items-start mb-3">
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="badge badge-neutral">{{ b.category.name }}</span>
+                    {% if b.is_verified %}
+                      <span class="badge badge-success" title="Verified Business"><i data-lucide="check-circle" class="w-3 h-3"></i> Verified</span>
+                    {% endif %}
+                  </div>
+                  <h3 class="text-xl font-bold mb-1">
+                    <a href="{% url 'businesses:detail' slug=b.slug %}" class="text-main hover:text-primary">{{ b.name }}</a>
+                  </h3>
+                </div>
+
+                <div class="trust-score-circle {{ b.avg_trust_score|trust_score_color }}" title="Average Trust Score">
+                  <span class="score-num">{{ b.avg_trust_score }}</span>
+                  <span class="score-denom">/100</span>
+                </div>
+              </div>
+
+              <p class="text-sm text-muted mb-4 line-clamp-2">
+                {{ b.short_description|default:b.description|truncatewords:20 }}
+              </p>
+            </div>
+
+            <div class="card-footer">
+              <div class="flex items-center gap-4 text-xs text-muted">
+                <span><i data-lucide="map-pin" class="w-3.5 h-3.5 inline"></i> {{ b.city }}{% if b.state %}, {{ b.state }}{% endif %}</span>
+                <span><i data-lucide="message-circle" class="w-3.5 h-3.5 inline"></i> {{ b.review_count_val|default:0 }} Review{{ b.review_count_val|default:0|pluralize }}</span>
+              </div>
+              <a href="{% url 'businesses:detail' slug=b.slug %}" class="btn btn-outline btn-sm">View Listing &rarr;</a>
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-span-2">
+            {% include 'components/empty_state.html' with title="No Businesses Match Your Search" message="Try clearing your filters or searching with different keywords." action_url="/businesses/" action_text="View All Businesses" %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% include 'components/pagination.html' %}
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

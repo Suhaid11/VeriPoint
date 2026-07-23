@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Account — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="saas-auth-wrapper">
+
+  <!-- Left Side: Brand Showcase & Statistics (55% Width) -->
+  <div class="saas-auth-left" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(30, 27, 75, 0.96) 100%), url('{% static 'images/auth_bg.png' %}') center/cover no-repeat;">
+    
+    <!-- Top Brand Header -->
+    <div class="animate-fade-in-up">
+      <div class="flex items-center gap-3 mb-10">
+        <div class="p-3 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 shadow-lg">
+          <i data-lucide="shield-check" class="w-8 h-8 text-indigo-400"></i>
+        </div>
+        <div>
+          <span class="text-2xl font-extrabold text-white tracking-tight block">VeriPoint</span>
+          <span class="text-xs text-indigo-300 font-semibold tracking-wider uppercase">Evidence-First Review Platform</span>
+        </div>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-5 leading-tight text-white tracking-tight">
+        Join The Trust<br>
+        <span class="text-indigo-400" style="color: #818cf8 !important;">Revolution.</span>
+      </h1>
+
+      <p class="text-base leading-relaxed mb-10 text-slate-300 max-w-lg">
+        Create an account to submit proof-backed reviews, audit business credibility, or manage your organization profile.
+      </p>
+
+      <!-- 4 Statistics Cards Grid -->
+      <div class="grid grid-cols-2 gap-4 max-w-lg mb-10">
+        <div class="stat-card-mini">
+          <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">15,000+</div>
+          <div class="text-xs text-indigo-200 font-medium">Verified Reviews</div>
+        </div>
+        <div class="stat-card-mini">
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 mb-1">96%</div>
+          <div class="text-xs text-indigo-200 font-medium">Evidence Accuracy</div>
+        </div>
+        <div class="stat-card-mini">
+          <div class="text-2xl sm:text-3xl font-extrabold text-sky-400 mb-1">4,300+</div>
+          <div class="text-xs text-indigo-200 font-medium">Verified Businesses</div>
+        </div>
+        <div class="stat-card-mini">
+          <div class="text-2xl sm:text-3xl font-extrabold text-amber-400 mb-1">89%</div>
+          <div class="text-xs text-indigo-200 font-medium">Community Trust Score</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Footer Trust Note -->
+    <div class="pt-6 border-t border-white/15 text-xs flex items-center justify-between text-slate-400">
+      <span class="flex items-center gap-2">
+        <i data-lucide="lock" class="w-4 h-4 text-emerald-400"></i>
+        Protected by VeriPoint Algorithmic Engine
+      </span>
+      <span class="font-bold text-white">60+ Verified Evidence Uploads</span>
+    </div>
+  </div>
+
+  <!-- Right Side: Clean Modern Registration Form (45% Width) -->
+  <div class="saas-auth-right">
+    <div class="saas-auth-card-inner animate-fade-in-up">
+
+      <!-- Header -->
+      <div class="mb-6">
+        <h2 class="text-3xl font-extrabold mb-1 text-main tracking-tight">Create an account</h2>
+        <p class="text-sm text-muted">Join India's evidence-first credibility network</p>
+      </div>
+
+      <!-- Registration Form -->
+      <form method="POST" action="{% url 'accounts:register' %}">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="p-3.5 mb-4 rounded-xl bg-danger-bg text-danger text-xs font-semibold border border-danger">
+            {% for error in form.non_field_errors %}
+              <div>{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <div class="form-group mb-0">
+            <label class="form-label" for="id_first_name">First Name</label>
+            {{ form.first_name }}
+          </div>
+          <div class="form-group mb-0">
+            <label class="form-label" for="id_last_name">Last Name</label>
+            {{ form.last_name }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="id_username">Username</label>
+          {{ form.username }}
+          {% if form.username.errors %}
+            <div class="form-error">{{ form.username.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="id_email">Email Address</label>
+          {{ form.email }}
+          {% if form.email.errors %}
+            <div class="form-error">{{ form.email.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="id_role">I want to register as</label>
+          {{ form.role }}
+        </div>
+
+        <div class="form-group mb-6">
+          <label class="form-label" for="id_password1">Password</label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}
+            <div class="form-error">{{ form.password1.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-full font-bold shadow-xl rounded-xl text-base py-3" style="background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);">
+          Register Account &rarr;
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <div class="text-center pt-6 mt-6 border-t border-subtle text-sm text-muted">
+        Already have an account? <a href="{% url 'accounts:login' %}" class="font-bold text-primary hover:underline">Log in here</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load veripoint_tags static %}
+
+{% block title %}Top Reviewer Leaderboard — VeriPoint{% endblock %}
+
+{% block content %}
+<!-- Hero Header Banner with Background Image Overlay -->
+<section class="hero-section py-14 text-center" style="background: linear-gradient(180deg, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.96) 100%), url('{% static 'images/leaderboard_bg.png' %}') center/cover no-repeat; color: #ffffff !important;">
+  <div class="container container-md">
+    <div class="inline-flex p-3.5 rounded-full bg-amber-500/20 text-amber-300 mb-3 border border-amber-400/30">
+      <i data-lucide="trophy" class="w-8 h-8" style="color: #f59e0b;"></i>
+    </div>
+    <h1 class="text-4xl font-extrabold mb-3" style="color: #ffffff !important;">Reviewer Reputation Leaderboard</h1>
+    <p class="text-md max-w-xl mx-auto leading-relaxed" style="color: #e2e8f0 !important;">Rankings of community members based on evidence quality, verified proof attachments, and community helpfulness votes.</p>
+  </div>
+</section>
+
+<div class="container container-md py-10">
+
+  <!-- Top 3 Podium Cards -->
+  {% if top_reviewers|length >= 3 %}
+    <div class="grid grid-cols-3 gap-6 mb-10 items-end">
+      <!-- 2nd Place -->
+      {% with r=top_reviewers.1 %}
+        <div class="card p-6 text-center border-subtle bg-subtle">
+          <div class="inline-flex p-2.5 px-4 rounded-full bg-slate-200 text-slate-800 font-bold text-xs mb-3">#2 Silver Medal</div>
+          <h3 class="text-lg font-bold mb-1"><a href="{% url 'accounts:profile' username=r.user.username %}" class="text-main hover:text-primary">{{ r.user.first_name|default:r.user.username }}</a></h3>
+          <span class="badge {{ r.level|reputation_badge_color }} mb-3">{{ r.get_level_display }}</span>
+          <div class="text-2xl font-extrabold text-primary mb-1">{{ r.score }} pts</div>
+          <div class="text-xs text-muted">{{ r.total_reviews }} reviews &bull; {{ r.total_evidence }} evidence</div>
+        </div>
+      {% endwith %}
+
+      <!-- 1st Place (Gold) -->
+      {% with r=top_reviewers.0 %}
+        <div class="card p-8 text-center border-warning bg-warning-bg shadow-xl transform -translate-y-2">
+          <div class="inline-flex p-3 px-5 rounded-full bg-amber-400 text-amber-950 font-extrabold text-xs mb-4 shadow-md">👑 #1 Champion</div>
+          <h2 class="text-xl font-bold mb-1"><a href="{% url 'accounts:profile' username=r.user.username %}" class="text-main hover:text-primary">{{ r.user.first_name|default:r.user.username }}</a></h2>
+          <span class="badge {{ r.level|reputation_badge_color }} mb-3">{{ r.get_level_display }}</span>
+          <div class="text-3xl font-extrabold text-primary mb-1">{{ r.score }} pts</div>
+          <div class="text-xs text-muted">{{ r.total_reviews }} reviews &bull; {{ r.total_evidence }} evidence &bull; {{ r.total_helpful_votes }} votes</div>
+        </div>
+      {% endwith %}
+
+      <!-- 3rd Place -->
+      {% with r=top_reviewers.2 %}
+        <div class="card p-6 text-center border-subtle bg-subtle">
+          <div class="inline-flex p-2.5 px-4 rounded-full bg-amber-100 text-amber-900 font-bold text-xs mb-3">#3 Bronze Medal</div>
+          <h3 class="text-lg font-bold mb-1"><a href="{% url 'accounts:profile' username=r.user.username %}" class="text-main hover:text-primary">{{ r.user.first_name|default:r.user.username }}</a></h3>
+          <span class="badge {{ r.level|reputation_badge_color }} mb-3">{{ r.get_level_display }}</span>
+          <div class="text-2xl font-extrabold text-primary mb-1">{{ r.score }} pts</div>
+          <div class="text-xs text-muted">{{ r.total_reviews }} reviews &bull; {{ r.total_evidence }} evidence</div>
+        </div>
+      {% endwith %}
+    </div>
+  {% endif %}
+
+  <!-- Full Leaderboard Table -->
+  <div class="card p-6 shadow-md">
+    <table class="w-full text-left border-collapse" style="font-size: var(--font-sm);">
+      <thead>
+        <tr class="border-b border-subtle text-xs text-muted font-bold uppercase">
+          <th class="py-3 px-4">Rank</th>
+          <th class="py-3 px-4">Reviewer</th>
+          <th class="py-3 px-4">Reputation Tier</th>
+          <th class="py-3 px-4 text-center">Reviews</th>
+          <th class="py-3 px-4 text-center">Proof Uploads</th>
+          <th class="py-3 px-4 text-center">Helpful Votes</th>
+          <th class="py-3 px-4 text-right">Reputation Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in top_reviewers %}
+          <tr class="border-b border-subtle hover:bg-subtle transition-colors">
+            <td class="py-3.5 px-4 font-bold text-muted">#{{ forloop.counter }}</td>
+            <td class="py-3.5 px-4">
+              <a href="{% url 'accounts:profile' username=r.user.username %}" class="font-bold text-main hover:text-primary">
+                {{ r.user.first_name|default:r.user.username }}
+              </a>
+              <span class="text-xs text-muted block">@{{ r.user.username }}</span>
+            </td>
+            <td class="py-3.5 px-4">
+              <span class="badge {{ r.level|reputation_badge_color }}">{{ r.get_level_display }}</span>
+            </td>
+            <td class="py-3.5 px-4 text-center font-semibold">{{ r.total_reviews }}</td>
+            <td class="py-3.5 px-4 text-center font-semibold text-accent-dark">{{ r.total_evidence }}</td>
+            <td class="py-3.5 px-4 text-center font-semibold text-success">{{ r.total_helpful_votes }}</td>
+            <td class="py-3.5 px-4 text-right font-extrabold text-primary text-base">{{ r.score }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-center py-6 text-muted">No reviewers ranked yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

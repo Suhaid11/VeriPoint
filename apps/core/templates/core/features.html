@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Platform Features — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container container-md py-12">
+  <div class="text-center mb-12">
+    <span class="badge badge-accent mb-3">Capabilities</span>
+    <h1 class="text-4xl font-extrabold mb-4">Built for Verification & Transparency</h1>
+    <p class="text-muted text-lg max-w-2xl mx-auto">
+      Explore the engineering features that make VeriPoint an enterprise-grade trust platform.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-3 gap-6 mb-12">
+    <div class="card p-6">
+      <div class="inline-flex p-3 rounded-full bg-primary-alpha-10 text-primary mb-4">
+        <i data-lucide="shield-check" class="w-6 h-6"></i>
+      </div>
+      <h4 class="mb-2">Evidence Attachment</h4>
+      <p class="text-sm text-muted">Upload photos, purchase invoices, receipts, and PDF documents. Every file is validated for format and size safety.</p>
+    </div>
+
+    <div class="card p-6">
+      <div class="inline-flex p-3 rounded-full bg-accent-subtle text-accent-dark mb-4">
+        <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+      </div>
+      <h4 class="mb-2">Credibility Engine</h4>
+      <p class="text-sm text-muted">Automated 0–100 score calculation weighing evidence count, type diversity, reviewer reputation, and community audit.</p>
+    </div>
+
+    <div class="card p-6">
+      <div class="inline-flex p-3 rounded-full bg-info-bg text-info mb-4">
+        <i data-lucide="users" class="w-6 h-6"></i>
+      </div>
+      <h4 class="mb-2">Community Audit</h4>
+      <p class="text-sm text-muted">Registered community members upvote, downvote, and verify evidence authenticity for public consensus.</p>
+    </div>
+
+    <div class="card p-6">
+      <div class="inline-flex p-3 rounded-full bg-warning-bg text-warning mb-4">
+        <i data-lucide="message-square" class="w-6 h-6"></i>
+      </div>
+      <h4 class="mb-2">Official Business Portal</h4>
+      <p class="text-sm text-muted">Businesses claim profiles, post official responses to reviews, and upload counter-evidence for dispute resolution.</p>
+    </div>
+
+    <div class="card p-6">
+      <div class="inline-flex p-3 rounded-full bg-success-bg text-success mb-4">
+        <i data-lucide="award" class="w-6 h-6"></i>
+      </div>
+      <h4 class="mb-2">Reviewer Reputation</h4>
+      <p class="text-sm text-muted">Reviewers earn reputation points and climb tiers (Newcomer to Authority) based on verifiable contributions.</p>
+    </div>
+
+    <div class="card p-6">
+      <div class="inline-flex p-3 rounded-full bg-danger-bg text-danger mb-4">
+        <i data-lucide="lock" class="w-6 h-6"></i>
+      </div>
+      <h4 class="mb-2">Audit & Security</h4>
+      <p class="text-sm text-muted">Comprehensive administrative audit logs, XSS sanitization, CSRF tokens, and permission-isolated role management.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

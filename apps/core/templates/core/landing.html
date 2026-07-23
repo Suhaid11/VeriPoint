@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load static veripoint_tags %}
+
+{% block title %}VeriPoint — Verify Before You Trust{% endblock %}
+
+{% block content %}
+<!-- Hero Section with Sleek Background Overlay -->
+<section class="hero-section" style="background: linear-gradient(180deg, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.96) 100%), url('{% static 'images/hero_bg.png' %}') center/cover no-repeat;">
+  <div class="container relative z-10">
+
+    <div class="hero-pill">
+      <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+      <span>Replaces 1–5 Star Ratings with Evidence-Backed Scoring</span>
+    </div>
+
+    <h1 class="hero-title">
+      Don't Trust Opinions.<br>
+      <span class="hero-gradient-text">Verify The Proof.</span>
+    </h1>
+
+    <p class="hero-subtext">
+      VeriPoint is India's evidence-first review platform. Every rating is backed by real photos, GST invoices, payment receipts, and visit timestamps to eliminate fake reviews.
+    </p>
+
+    <!-- Global Search Bar with High-Contrast Indigo Popular Search Chips -->
+    <div class="max-w-2xl mx-auto mb-6">
+      <form action="{% url 'businesses:list' %}" method="GET" class="hero-search-wrapper" style="border: 2px solid rgba(129, 140, 248, 0.5); transition: all 0.3s ease;">
+        <i data-lucide="search" class="text-indigo-500 ml-4 w-5 h-5"></i>
+        <input type="text" name="q" id="heroSearchInput" placeholder="Search businesses, services, or cities (e.g. Apollo, MTR, Bengaluru)..." class="hero-search-input font-medium" autofocus>
+        <button type="submit" class="btn btn-primary btn-md font-bold shadow-lg" style="border-radius: 0.75rem; padding: 0.7rem 1.75rem; background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);">Search Proof</button>
+      </form>
+
+      <!-- Ultra High-Contrast Indigo Popular Search Chips -->
+      <div class="flex items-center justify-center gap-2 flex-wrap text-xs text-white mt-4">
+        <span class="font-bold text-white uppercase tracking-wider text-xs px-2.5 py-1 rounded-md border border-white/30" style="background-color: rgba(255, 255, 255, 0.15) !important; color: #ffffff !important;">Popular Searches:</span>
+        <button type="button" onclick="setSearch('Apollo')" class="px-3.5 py-1.5 rounded-full font-bold shadow-md transition cursor-pointer flex items-center gap-1.5" style="background-color: #4f46e5 !important; color: #ffffff !important; border: 1px solid #818cf8 !important;">🏥 Apollo Hospital</button>
+        <button type="button" onclick="setSearch('MTR')" class="px-3.5 py-1.5 rounded-full font-bold shadow-md transition cursor-pointer flex items-center gap-1.5" style="background-color: #4f46e5 !important; color: #ffffff !important; border: 1px solid #818cf8 !important;">🍛 MTR Lalbagh</button>
+        <button type="button" onclick="setSearch('Croma')" class="px-3.5 py-1.5 rounded-full font-bold shadow-md transition cursor-pointer flex items-center gap-1.5" style="background-color: #4f46e5 !important; color: #ffffff !important; border: 1px solid #818cf8 !important;">💻 Croma Electronics</button>
+        <button type="button" onclick="setSearch('Bengaluru')" class="px-3.5 py-1.5 rounded-full font-bold shadow-md transition cursor-pointer flex items-center gap-1.5" style="background-color: #4f46e5 !important; color: #ffffff !important; border: 1px solid #818cf8 !important;">📍 Bengaluru</button>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="hero-stats-row">
+      <div class="hero-stat-item"><i data-lucide="camera" class="text-indigo-400 w-4 h-4"></i> Photo Proof</div>
+      <div class="hero-stat-item"><i data-lucide="file-text" class="text-emerald-400 w-4 h-4"></i> Verified Invoices</div>
+      <div class="hero-stat-item"><i data-lucide="users" class="text-sky-400 w-4 h-4"></i> Community Audit</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Comparison Banner: Stars vs Proof -->
+<section class="py-12 bg-surface border-y border-subtle">
+  <div class="container">
+    <div class="grid grid-cols-2 gap-6 items-stretch">
+      <div class="card p-6 border-danger bg-danger-bg">
+        <h4 class="text-danger mb-3 flex items-center gap-2 font-bold">
+          <i data-lucide="x-circle" class="w-5 h-5"></i> Traditional Star Ratings
+        </h4>
+        <ul class="flex flex-col gap-2.5 text-sm text-muted">
+          <li class="flex items-center gap-2">❌ Fabricated 5-star reviews bought from online bot farms</li>
+          <li class="flex items-center gap-2">❌ Unverified negative ratings posted by competitors</li>
+          <li class="flex items-center gap-2">❌ Emotional 1-star rants with zero evidence</li>
+          <li class="flex items-center gap-2">❌ No proof of actual purchase or hospital visit</li>
+        </ul>
+      </div>
+
+      <div class="card p-6 border-accent bg-accent-subtle">
+        <h4 class="text-accent-dark mb-3 flex items-center gap-2 font-bold">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i> VeriPoint Evidence Model
+        </h4>
+        <ul class="flex flex-col gap-2.5 text-sm text-muted">
+          <li class="flex items-center gap-2">✅ Verified purchase GST invoices and receipts attached</li>
+          <li class="flex items-center gap-2">✅ Algorithmic Credibility Score (0–100)</li>
+          <li class="flex items-center gap-2">✅ Community evidence verification & peer audits</li>
+          <li class="flex items-center gap-2">✅ Official business owner responses & counter-proof</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Category Browser with Custom Graphic Thumbnails -->
+<section class="py-12">
+  <div class="container">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h2 class="text-3xl font-bold">Browse Categories</h2>
+        <p class="text-sm text-muted">Explore verified Indian businesses across 6 core industries</p>
+      </div>
+      <a href="{% url 'businesses:categories' %}" class="btn btn-secondary btn-sm">View All Categories</a>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6">
+      {% for cat in categories %}
+        <a href="{% url 'businesses:category_detail' slug=cat.slug %}" class="card card-interactive overflow-hidden p-0 flex flex-col justify-between">
+          <div class="relative h-36 w-full overflow-hidden bg-subtle">
+            {% if 'Healthcare' in cat.name %}
+              <img src="{% static 'images/hospital.png' %}" alt="{{ cat.name }}" class="w-full h-full object-cover">
+            {% elif 'Dining' in cat.name %}
+              <img src="{% static 'images/dining.png' %}" alt="{{ cat.name }}" class="w-full h-full object-cover">
+            {% elif 'Electronics' in cat.name %}
+              <img src="{% static 'images/tech.png' %}" alt="{{ cat.name }}" class="w-full h-full object-cover">
+            {% elif 'Automotive' in cat.name %}
+              <img src="{% static 'images/auto.png' %}" alt="{{ cat.name }}" class="w-full h-full object-cover">
+            {% elif 'Software' in cat.name %}
+              <img src="{% static 'images/software.png' %}" alt="{{ cat.name }}" class="w-full h-full object-cover">
+            {% else %}
+              <img src="{% static 'images/finance.png' %}" alt="{{ cat.name }}" class="w-full h-full object-cover">
+            {% endif %}
+            <div class="absolute top-3 right-3">
+              <span class="badge badge-primary font-bold shadow-md">{{ cat.business_count }} Listing{{ cat.business_count|pluralize }}</span>
+            </div>
+          </div>
+
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h4 class="text-lg font-bold mb-1 text-main">{{ cat.name }}</h4>
+              <p class="text-xs text-muted leading-relaxed mb-4">{{ cat.description }}</p>
+            </div>
+            <span class="text-xs font-semibold text-primary mt-auto">Explore Category &rarr;</span>
+          </div>
+        </a>
+      {% empty %}
+        <div class="col-span-3 text-center py-6 text-muted">No categories available.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Featured Businesses -->
+<section class="py-12 bg-subtle">
+  <div class="container">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h2 class="text-3xl font-bold">Top Verified Businesses</h2>
+        <p class="text-sm text-muted">Ranked by proof quality and credibility score</p>
+      </div>
+      <a href="{% url 'businesses:list' %}" class="btn btn-primary btn-sm">Explore All Businesses</a>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6">
+      {% for b in featured_businesses %}
+        <div class="card card-interactive overflow-hidden p-0 flex flex-col justify-between">
+          <div class="h-40 w-full overflow-hidden bg-subtle relative">
+            {% if 'Apollo' in b.name or 'Manipal' in b.name %}
+              <img src="{% static 'images/hospital.png' %}" alt="{{ b.name }}" class="w-full h-full object-cover">
+            {% elif 'MTR' in b.name or 'Paragon' in b.name %}
+              <img src="{% static 'images/dining.png' %}" alt="{{ b.name }}" class="w-full h-full object-cover">
+            {% elif 'Croma' in b.name or 'Reliance' in b.name %}
+              <img src="{% static 'images/tech.png' %}" alt="{{ b.name }}" class="w-full h-full object-cover">
+            {% elif 'Mandovi' in b.name or 'Popular' in b.name %}
+              <img src="{% static 'images/auto.png' %}" alt="{{ b.name }}" class="w-full h-full object-cover">
+            {% elif 'Zoho' in b.name or 'Freshworks' in b.name %}
+              <img src="{% static 'images/software.png' %}" alt="{{ b.name }}" class="w-full h-full object-cover">
+            {% else %}
+              <img src="{% static 'images/finance.png' %}" alt="{{ b.name }}" class="w-full h-full object-cover">
+            {% endif %}
+
+            <div class="absolute top-3 right-3">
+              <div class="trust-score-circle {{ b.avg_trust_score|trust_score_color }} shadow-lg" title="Average Trust Score">
+                <span class="score-num">{{ b.avg_trust_score }}</span>
+                <span class="score-denom">/100</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <span class="badge badge-neutral mb-2">{{ b.category.name }}</span>
+              <h3 class="text-xl font-bold mb-1"><a href="{% url 'businesses:detail' slug=b.slug %}" class="text-main hover:text-primary">{{ b.name }}</a></h3>
+
+              <p class="text-sm text-muted mb-4 line-clamp-2">
+                {{ b.short_description|default:b.description|truncatewords:18 }}
+              </p>
+            </div>
+
+            <div class="pt-3 border-t border-subtle flex items-center justify-between">
+              <span class="text-xs text-muted"><i data-lucide="map-pin" class="w-3.5 h-3.5 inline"></i> {{ b.city }}</span>
+              <span class="text-xs font-semibold text-primary">{{ b.review_count }} Review{{ b.review_count|pluralize }} &rarr;</span>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-span-3">
+          {% include 'components/empty_state.html' with title="No Businesses Listed" message="Be the first to create a business listing on VeriPoint." action_url="/businesses/create/" action_text="Add Business" %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Recent Evidence Reviews -->
+<section class="py-12">
+  <div class="container">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h2 class="text-3xl font-bold">Recent Evidence-Backed Reviews</h2>
+        <p class="text-sm text-muted">Real experiences verified with uploaded attachments</p>
+      </div>
+      <a href="{% url 'reviews:leaderboard' %}" class="btn btn-secondary btn-sm">Top Reviewers Leaderboard</a>
+    </div>
+
+    <div class="grid grid-cols-2 gap-6">
+      {% for r in recent_reviews %}
+        <div class="card p-6 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-start mb-3">
+              <div>
+                <span class="text-xs text-muted mb-1 block">Review for <a href="{% url 'businesses:detail' slug=r.business.slug %}" class="font-bold text-primary">{{ r.business.name }}</a></span>
+                <h4 class="text-lg font-bold"><a href="{% url 'reviews:detail' pk=r.pk %}">{{ r.title }}</a></h4>
+              </div>
+              {% if r.trust_score %}
+                <div class="trust-score-badge {{ r.trust_score.total_score|trust_score_color }}">
+                  Score {{ r.trust_score.total_score }}
+                </div>
+              {% endif %}
+            </div>
+
+            <p class="text-sm text-muted mb-4 line-clamp-3 leading-relaxed">{{ r.body|truncatewords:30 }}</p>
+
+            <div class="flex items-center gap-2 mb-4">
+              {% for item in r.evidence_items.all|slice:":3" %}
+                {% include 'components/evidence_badge.html' with evidence=item %}
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span class="text-xs text-muted">By <strong>{{ r.author.username }}</strong> &bull; {{ r.created_at|short_timesince }}</span>
+            <a href="{% url 'reviews:detail' pk=r.pk %}" class="btn btn-outline btn-sm">View Proof &rarr;</a>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-span-2 text-center py-8 text-muted">No reviews written yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+function setSearch(query) {
+  const input = document.getElementById('heroSearchInput');
+  input.value = query;
+  input.form.submit();
+}
+</script>
+{% endblock %}

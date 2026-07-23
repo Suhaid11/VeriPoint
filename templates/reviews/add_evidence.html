@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Supplemental Proof — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container container-md py-8">
+  <div class="card p-8 max-w-xl mx-auto shadow-lg">
+
+    <h2 class="text-2xl font-bold mb-2">Add Supplemental Evidence</h2>
+    <p class="text-sm text-muted mb-6">Attach additional photos, receipts, or documents to "{{ review.title }}".</p>
+
+    <form method="POST" action="" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="form-group p-6 border-2 border-dashed border-primary rounded-lg bg-subtle mb-6">
+        <input type="file" name="evidence_files" id="evidence-file-input" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.pdf" class="form-control mb-3" required>
+        <div id="evidence-preview-container" class="mt-4"></div>
+      </div>
+
+      <div class="flex gap-4">
+        <button type="submit" class="btn btn-primary btn-lg flex-1">Upload Supplemental Proof</button>
+        <a href="{% url 'reviews:detail' pk=review.pk %}" class="btn btn-secondary btn-lg">Cancel</a>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/components/file-upload.js' %}"></script>
+{% endblock %}

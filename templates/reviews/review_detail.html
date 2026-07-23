@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+{% load veripoint_tags static %}
+
+{% block title %}{{ review.title }} — VeriPoint Evidence Review{% endblock %}
+
+{% block content %}
+<div class="container container-md py-8">
+
+  <!-- Breadcrumb -->
+  <div class="mb-6 flex justify-between items-center">
+    <a href="{% url 'businesses:detail' slug=review.business.slug %}" class="text-xs text-muted font-semibold hover:text-primary">&larr; Back to {{ review.business.name }}</a>
+    <span class="text-xs text-muted">Review ID #{{ review.id }}</span>
+  </div>
+
+  <!-- Main Review Card -->
+  <div class="card p-8 mb-8">
+    <!-- Review Author Header -->
+    <div class="flex justify-between items-start mb-6 pb-4 border-b border-subtle">
+      <div class="flex items-center gap-4">
+        <div class="avatar-container" style="width: 52px; height: 52px; border-radius: var(--radius-full); background-color: var(--primary-alpha-10); display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--primary);">
+          {% if review.author.profile.avatar %}
+            <img src="{{ review.author.profile.avatar.url }}" alt="{{ review.author.username }}" class="w-full h-full object-cover rounded-full">
+          {% else %}
+            {{ review.author.username|slice:":1"|upper }}
+          {% endif %}
+        </div>
+
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="text-lg font-bold">
+              <a href="{% url 'accounts:profile' username=review.author.username %}">{{ review.author.first_name|default:review.author.username }}</a>
+            </h3>
+            {% if review.author.reputation %}
+              <span class="badge {{ review.author.reputation.level|reputation_badge_color }}">{{ review.author.reputation.get_level_display }}</span>
+            {% endif %}
+          </div>
+          <div class="text-xs text-muted">
+            Visited on <strong>{{ review.visit_date|default:review.created_at|date:"F d, Y" }}</strong> &bull; Posted {{ review.created_at|short_timesince }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Score Circle -->
+      {% if review.trust_score %}
+        <div class="text-center">
+          <div class="trust-score-circle {{ review.trust_score.total_score|trust_score_color }} mb-1" style="width: 64px; height: 64px;">
+            <span class="score-num text-xl">{{ review.trust_score.total_score }}</span>
+            <span class="score-denom">/100</span>
+          </div>
+          <span class="text-xs font-bold text-muted">Credibility</span>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Review Content -->
+    <h1 class="text-2xl font-extrabold mb-4">{{ review.title }}</h1>
+    <p class="text-md text-main leading-relaxed mb-6 whitespace-pre-line">{{ review.body }}</p>
+
+    <!-- Credibility Score Mathematical Breakdown Card -->
+    {% if review.trust_score %}
+      <div class="card p-6 bg-subtle mb-6 border-primary">
+        <h4 class="mb-3 flex items-center gap-2 text-primary">
+          <i data-lucide="bar-chart-2"></i> Algorithmic Credibility Breakdown ({{ review.trust_score.total_score }}/100)
+        </h4>
+
+        <div class="grid grid-cols-2 gap-4 text-xs">
+          <div>
+            <div class="flex justify-between mb-1">
+              <span>Evidence Attachments</span>
+              <strong>{{ review.trust_score.evidence_score }}/40 pts</strong>
+            </div>
+            <div class="w-full bg-surface rounded-full h-2">
+              <div class="bg-primary h-2 rounded-full" style="width: {% widthratio review.trust_score.evidence_score 40 100 %}%;"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between mb-1">
+              <span>Reviewer Reputation</span>
+              <strong>{{ review.trust_score.reputation_score }}/20 pts</strong>
+            </div>
+            <div class="w-full bg-surface rounded-full h-2">
+              <div class="bg-accent h-2 rounded-full" style="width: {% widthratio review.trust_score.reputation_score 20 100 %}%;"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between mb-1">
+              <span>Community Audit</span>
+              <strong>{{ review.trust_score.community_score }}/20 pts</strong>
+            </div>
+            <div class="w-full bg-surface rounded-full h-2">
+              <div class="bg-info h-2 rounded-full" style="width: {% widthratio review.trust_score.community_score 20 100 %}%;"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between mb-1">
+              <span>Recency Weight</span>
+              <strong>{{ review.trust_score.recency_score }}/10 pts</strong>
+            </div>
+            <div class="w-full bg-surface rounded-full h-2">
+              <div class="bg-warning h-2 rounded-full" style="width: {% widthratio review.trust_score.recency_score 10 100 %}%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Attached Evidence Gallery Grid -->
+    <div class="mb-6">
+      <div class="flex justify-between items-center mb-3">
+        <h4 class="flex items-center gap-2">
+          <i data-lucide="paperclip" class="text-accent"></i> Verified Evidence Attachments ({{ review.evidence_count }})
+        </h4>
+        {% if user == review.author %}
+          <a href="{% url 'reviews:add_evidence' pk=review.pk %}" class="btn btn-secondary btn-sm">+ Add More Proof</a>
+        {% endif %}
+      </div>
+
+      <div class="grid grid-cols-3 gap-4">
+        {% for item in review.evidence_items.all %}
+          <div class="card p-4 flex flex-col justify-between hover:border-primary">
+            <div class="evidence-preview-trigger cursor-pointer"
+                 data-file-url="{% if item.file %}{{ item.file.url }}{% else %}#{% endif %}"
+                 data-file-type="{{ item.evidence_type }}"
+                 data-filename="{{ item.original_filename }}"
+                 data-caption="{{ item.caption }}">
+              <div class="flex justify-between items-center mb-2">
+                {% include 'components/evidence_badge.html' with evidence=item %}
+                <span class="text-xs text-muted">{{ item.file_size_display }}</span>
+              </div>
+              <div class="font-semibold text-xs truncate mb-1">{{ item.original_filename }}</div>
+              {% if item.caption %}
+                <p class="text-xs text-muted italic line-clamp-2">"{{ item.caption }}"</p>
+              {% endif %}
+            </div>
+
+            <div class="mt-3 pt-2 border-t border-subtle flex justify-between items-center text-xs">
+              <span class="text-primary font-medium evidence-preview-trigger cursor-pointer"
+                    data-file-url="{% if item.file %}{{ item.file.url }}{% else %}#{% endif %}"
+                    data-file-type="{{ item.evidence_type }}"
+                    data-filename="{{ item.original_filename }}"
+                    data-caption="{{ item.caption }}">
+                <i data-lucide="eye" class="w-3.5 h-3.5 inline"></i> Inspect
+              </span>
+
+              {% if user.is_authenticated and user != item.uploaded_by %}
+                <button class="btn btn-secondary btn-xs btn-verify-evidence" data-evidence-id="{{ item.id }}" data-filename="{{ item.original_filename }}">
+                  <i data-lucide="check-square" class="w-3 h-3 text-accent"></i> Audit Proof
+                </button>
+              {% endif %}
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-span-3 text-muted text-xs p-4 text-center bg-subtle rounded">No evidence attachments added yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Official Business Response (If Any) -->
+    {% if business_response %}
+      <div class="card p-6 mb-6 bg-primary-subtle border-primary">
+        <div class="flex justify-between items-center mb-2">
+          <h4 class="text-primary flex items-center gap-2">
+            <i data-lucide="shield-check"></i> Official Business Response
+          </h4>
+          <span class="text-xs text-muted">{{ business_response.created_at|short_timesince }}</span>
+        </div>
+        <p class="text-sm text-main leading-relaxed">{{ business_response.body }}</p>
+      </div>
+    {% elif user == review.business.owner or user.is_platform_admin %}
+      <!-- Business Owner Response Form -->
+      <div class="card p-6 mb-6 bg-subtle border-accent">
+        <h4 class="mb-2 text-accent-dark">Respond as Business Owner</h4>
+        <form method="POST" action="{% url 'community:business_response' pk=review.pk %}">
+          {% csrf_token %}
+          <div class="form-group mb-3">
+            <textarea name="body" rows="3" placeholder="Write an official response to this review..." class="form-control text-sm" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-accent btn-sm">Publish Official Response</button>
+        </form>
+      </div>
+    {% endif %}
+
+    <!-- Footer Voting Actions -->
+    <div class="card-footer vote-container">
+      <div class="flex items-center gap-3">
+        <button class="btn btn-secondary btn-sm btn-vote" data-review-id="{{ review.id }}" data-value="1">
+          <i data-lucide="thumbs-up" class="w-4 h-4"></i> Upvote
+        </button>
+        <span class="vote-score font-bold text-sm text-main">{{ review.vote_score }}</span>
+        <button class="btn btn-secondary btn-sm btn-vote" data-review-id="{{ review.id }}" data-value="-1">
+          <i data-lucide="thumbs-down" class="w-4 h-4"></i> Downvote
+        </button>
+      </div>
+
+      <button class="btn btn-outline btn-sm btn-bookmark {% if is_bookmarked %}bookmarked{% endif %}" data-type="review" data-id="{{ review.id }}">
+        <i data-lucide="bookmark" class="w-4 h-4"></i> Save Review
+      </button>
+    </div>
+  </div>
+
+  <!-- Comments Section -->
+  <div class="card p-8">
+    <h3 class="mb-6">Community Discussion ({{ review.comment_count }})</h3>
+
+    <!-- Post Comment Form -->
+    {% if user.is_authenticated %}
+      <form method="POST" action="{% url 'community:comment' pk=review.pk %}" class="mb-8">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+          <textarea name="body" rows="3" placeholder="Join the discussion... Ask a question or share verified insights." class="form-control text-sm" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
+      </form>
+    {% else %}
+      <div class="p-4 bg-subtle rounded text-center text-sm text-muted mb-6">
+        <a href="{% url 'accounts:login' %}?next={% url 'reviews:detail' pk=review.pk %}" class="font-bold text-primary">Log in</a> to join the conversation.
+      </div>
+    {% endif %}
+
+    <!-- Threaded Comment List -->
+    <div class="flex flex-col gap-4">
+      {% for c in review.comments.all %}
+        {% if not c.parent %}
+          <div class="p-4 bg-subtle rounded-lg">
+            <div class="flex justify-between items-center mb-2">
+              <div class="flex items-center gap-2">
+                <strong class="text-sm">{{ c.author.username }}</strong>
+                <span class="text-xs text-muted">&bull; {{ c.created_at|short_timesince }}</span>
+              </div>
+              {% if user.is_authenticated %}
+                <button class="btn btn-secondary btn-xs btn-reply-toggle" data-comment-id="{{ c.id }}">Reply</button>
+              {% endif %}
+            </div>
+            <p class="text-sm text-main mb-2">{{ c.body }}</p>
+
+            <!-- Reply Form (Hidden by default) -->
+            <div id="reply-form-{{ c.id }}" class="hidden mt-3 pt-3 border-t border-subtle">
+              <form method="POST" action="{% url 'community:comment' pk=review.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="parent_id" value="{{ c.id }}">
+                <div class="form-group mb-2">
+                  <textarea name="body" rows="2" placeholder="Write a reply to @{{ c.author.username }}..." class="form-control text-xs" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-xs">Submit Reply</button>
+              </form>
+            </div>
+
+            <!-- Nested Replies -->
+            {% for reply in c.replies.all %}
+              <div class="ml-6 mt-3 pt-3 border-t border-subtle">
+                <div class="flex items-center gap-2 mb-1">
+                  <strong class="text-xs text-primary">{{ reply.author.username }}</strong>
+                  <span class="text-xs text-muted">&bull; {{ reply.created_at|short_timesince }}</span>
+                </div>
+                <p class="text-xs text-muted">{{ reply.body }}</p>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% empty %}
+        <div class="text-sm text-muted text-center py-4">No comments posted yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/components/evidence-viewer.js' %}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Comment Reply Toggle
+    document.querySelectorAll('.btn-reply-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const commentId = btn.dataset.commentId;
+        const replyForm = document.getElementById(`reply-form-${commentId}`);
+        if (replyForm) {
+          replyForm.classList.toggle('hidden');
+        }
+      });
+    });
+
+    // Evidence Audit Verification Modal
+    document.querySelectorAll('.btn-verify-evidence').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const evidenceId = btn.dataset.evidenceId;
+        const filename = btn.dataset.filename;
+        openVerificationModal(evidenceId, filename);
+      });
+    });
+  });
+
+  function openVerificationModal(evidenceId, filename) {
+    let modal = document.getElementById('verification-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'verification-modal';
+      modal.className = 'modal-backdrop';
+      document.body.appendChild(modal);
+    }
+
+    modal.innerHTML = `
+      <div class="modal-dialog max-w-md">
+        <div class="modal-header">
+          <h3 class="text-base font-bold flex items-center gap-2">
+            <i data-lucide="shield-check" class="text-accent"></i> Audit Evidence Proof
+          </h3>
+          <button class="btn btn-secondary btn-icon" onclick="document.getElementById('verification-modal').classList.remove('show')">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="text-xs text-muted mb-4">Audit file: <strong>${filename}</strong>. Does this attachment appear genuine and accurate?</p>
+
+          <form id="evidence-verification-form">
+            <div class="form-group mb-4">
+              <label class="form-label">Audit Assessment</label>
+              <select name="status" class="form-control text-sm" required>
+                <option value="authentic">Authentic & Genuine</option>
+                <option value="suspicious">Suspicious / Potential Fake</option>
+                <option value="inconclusive">Inconclusive</option>
+              </select>
+            </div>
+
+            <div class="form-group mb-4">
+              <label class="form-label">Audit Notes (Optional)</label>
+              <textarea name="notes" rows="2" placeholder="Provide context for your assessment..." class="form-control text-xs"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-accent btn-sm w-full">Submit Verification Audit</button>
+          </form>
+        </div>
+      </div>
+    `;
+
+    modal.classList.add('show');
+    if (window.lucide) window.lucide.createIcons();
+
+    const form = modal.querySelector('#evidence-verification-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const status = form.status.value;
+      const notes = form.notes.value;
+      const csrfToken = getCsrfToken();
+
+      try {
+        const res = await fetch(`/community/verify-evidence/${evidenceId}/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrfToken,
+          },
+          body: `status=${status}&notes=${encodeURIComponent(notes)}`,
+        });
+
+        if (res.ok) {
+          modal.classList.remove('show');
+          showToast('Evidence verification audit submitted!', 'success');
+          setTimeout(() => window.location.reload(), 1000);
+        } else {
+          const errData = await res.json();
+          showToast(errData.error || 'Failed to submit verification.', 'error');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  }
+</script>
+{% endblock %}

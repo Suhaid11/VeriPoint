@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Help & Documentation — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container container-md py-12">
+  <div class="text-center mb-12">
+    <h1 class="text-4xl font-extrabold mb-4">Help Center & FAQs</h1>
+    <p class="text-muted text-lg">Learn how evidence verification and credibility scoring work on VeriPoint.</p>
+  </div>
+
+  <div class="flex flex-col gap-6 max-w-3xl mx-auto">
+    <div class="card p-6" id="verification">
+      <h3 class="mb-2">How does Community Evidence Verification work?</h3>
+      <p class="text-sm text-muted">
+        When a reviewer uploads an invoice, receipt, or photo proof, community members inspect the evidence for authenticity. Members vote whether the evidence is Authentic, Suspicious, or Inconclusive. Aggregated verifications contribute directly to the review's Credibility Score.
+      </p>
+    </div>
+
+    <div class="card p-6" id="scoring">
+      <h3 class="mb-2">What is the Credibility Score (0–100)?</h3>
+      <p class="text-sm text-muted">
+        The Credibility Score replaces 1–5 star ratings with an objective mathematical trust score. It combines:
+      </p>
+      <ul class="text-sm text-muted mt-2 pl-4 list-disc flex flex-col gap-1">
+        <li>Evidence attachments & document diversity (max 40 pts)</li>
+        <li>Reviewer reputation history (max 20 pts)</li>
+        <li>Community upvotes & evidence verifications (max 20 pts)</li>
+        <li>Recency decay (max 10 pts)</li>
+        <li>Business owner response & dialogue (max 10 pts)</li>
+      </ul>
+    </div>
+
+    <div class="card p-6" id="guidelines">
+      <h3 class="mb-2">What types of evidence can I attach?</h3>
+      <p class="text-sm text-muted">
+        You can attach photos of products/facilities, purchase invoices, payment receipts, service contracts, screenshots of booking confirmations, and supporting PDF documents. Allowed formats are JPG, PNG, WEBP, GIF, and PDF (max 10MB per file).
+      </p>
+    </div>
+
+    <div class="card p-6">
+      <h3 class="mb-2">How can Business Owners claim listings?</h3>
+      <p class="text-sm text-muted">
+        Business owners can register an account, set their role to Business Owner, and claim existing business profiles or submit new business listings. Verified business owners can reply to reviews and submit counter-evidence.
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if editing %}Edit {{ business.name }}{% else %}Add Business Listing{% endif %} — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container container-md py-8">
+  <div class="card p-8 max-w-2xl mx-auto shadow-lg">
+    <h2 class="text-2xl font-bold mb-2">
+      {% if editing %}Edit Business Listing{% else %}List a New Business{% endif %}
+    </h2>
+    <p class="text-sm text-muted mb-6">Enter your business profile details for proof-backed community review.</p>
+
+    <form method="POST" action="">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label class="form-label">Business Name</label>
+        {{ form.name }}
+        {% if form.name.errors %}<div class="form-error">{{ form.name.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        {{ form.category }}
+        {% if form.category.errors %}<div class="form-error">{{ form.category.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Short Tagline (Short Summary)</label>
+        {{ form.short_description }}
+        {% if form.short_description.errors %}<div class="form-error">{{ form.short_description.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Full Business Description</label>
+        {{ form.description }}
+        {% if form.description.errors %}<div class="form-error">{{ form.description.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label class="form-label">Street Address</label>
+          {{ form.address }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">City</label>
+          {{ form.city }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label class="form-label">State / Province</label>
+          {{ form.state }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">ZIP / Postal Code</label>
+          {{ form.zip_code }}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4">
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          {{ form.phone }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contact Email</label>
+          {{ form.email }}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Website</label>
+          {{ form.website }}
+        </div>
+      </div>
+
+      <div class="flex gap-4 mt-6 pt-4 border-t border-subtle">
+        <button type="submit" class="btn btn-primary btn-lg">
+          {% if editing %}Save Changes{% else %}Create Business Listing{% endif %}
+        </button>
+        <a href="{% if editing %}{% url 'businesses:detail' slug=business.slug %}{% else %}{% url 'businesses:list' %}{% endif %}" class="btn btn-secondary btn-lg">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

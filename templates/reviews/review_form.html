@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Write Review for {{ business.name }} — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container container-md py-8">
+  <div class="card p-8 max-w-2xl mx-auto shadow-lg">
+
+    <!-- Business Header Badge -->
+    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-subtle">
+      <div class="inline-flex p-3 rounded-full bg-primary-alpha-10 text-primary">
+        <i data-lucide="building" class="w-6 h-6"></i>
+      </div>
+      <div>
+        <span class="text-xs text-muted block">Writing Evidence Review For</span>
+        <h2 class="text-xl font-bold">{{ business.name }}</h2>
+      </div>
+    </div>
+
+    <form method="POST" action="" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label class="form-label">Review Headline / Title</label>
+        {{ form.title }}
+        {% if form.title.errors %}<div class="form-error">{{ form.title.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Detailed Review Description</label>
+        {{ form.body }}
+        {% if form.body.errors %}<div class="form-error">{{ form.body.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label class="form-label">Date of Visit / Purchase</label>
+          {{ form.visit_date }}
+          {% if form.visit_date.errors %}<div class="form-error">{{ form.visit_date.errors.0 }}</div>{% endif %}
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Satisfaction Rating (1–5)</label>
+          {{ form.rating }}
+          {% if form.rating.errors %}<div class="form-error">{{ form.rating.errors.0 }}</div>{% endif %}
+        </div>
+      </div>
+
+      <!-- Multi-File Evidence Uploader -->
+      <div class="form-group mt-6 p-6 border-2 border-dashed border-primary rounded-lg bg-subtle">
+        <div class="text-center mb-4">
+          <i data-lucide="upload-cloud" class="w-10 h-10 text-primary mx-auto mb-2"></i>
+          <h4 class="text-base font-bold">Attach Proof & Evidence Items</h4>
+          <p class="text-xs text-muted">Upload photos, purchase invoices, receipts, or PDF documents to boost your review's Credibility Score.</p>
+        </div>
+
+        <input type="file" name="evidence_files" id="evidence-file-input" multiple accept=".jpg,.jpeg,.png,.gif,.webp,.pdf" class="form-control mb-3">
+        <div class="form-hint text-center">Max 10 MB per file. Allowed formats: JPG, PNG, WEBP, GIF, PDF. Max 10 files.</div>
+
+        <!-- Dynamic File Previews -->
+        <div id="evidence-preview-container" class="mt-4"></div>
+      </div>
+
+      <div class="flex gap-4 mt-8 pt-4 border-t border-subtle">
+        <button type="submit" class="btn btn-primary btn-lg flex-1">Publish Evidence Review</button>
+        <a href="{% url 'businesses:detail' slug=business.slug %}" class="btn btn-secondary btn-lg">Cancel</a>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/components/file-upload.js' %}"></script>
+{% endblock %}

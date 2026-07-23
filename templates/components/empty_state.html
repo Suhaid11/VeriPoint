@@ -1,0 +1,10 @@
+<div class="text-center py-12 px-6 card">
+  <div class="mb-4 inline-flex p-4 rounded-full bg-subtle text-muted">
+    <i data-lucide="{{ icon|default:'folder-open' }}" class="w-8 h-8"></i>
+  </div>
+  <h4 class="mb-2">{{ title|default:"No items found" }}</h4>
+  <p class="text-muted text-sm max-w-md mx-auto mb-6">{{ message|default:"There is nothing to display here at the moment." }}</p>
+  {% if action_url %}
+    <a href="{{ action_url }}" class="btn btn-primary btn-sm">{{ action_text|default:"Get Started" }}</a>
+  {% endif %}
+</div>

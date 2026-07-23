@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Account Settings — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container container-sm py-12">
+  <div class="card p-8 shadow-lg">
+    <h2 class="text-2xl font-bold mb-6">Account Settings</h2>
+
+    <form method="POST" action="{% url 'accounts:settings' %}">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label class="form-label">Theme Preference</label>
+        {{ form.theme_preference }}
+        <div class="form-hint">Choose whether VeriPoint defaults to Light, Dark, or System mode.</div>
+      </div>
+
+      <div class="form-group mt-6">
+        <label class="flex items-center gap-3 cursor-pointer">
+          {{ form.email_notifications }}
+          <span class="font-medium text-sm">Receive email notifications for review activity</span>
+        </label>
+      </div>
+
+      <div class="flex gap-4 mt-8">
+        <button type="submit" class="btn btn-primary btn-lg">Save Settings</button>
+        <a href="{% url 'accounts:dashboard' %}" class="btn btn-secondary btn-lg">Back to Dashboard</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

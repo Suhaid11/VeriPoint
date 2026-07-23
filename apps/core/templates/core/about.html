@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us — VeriPoint{% endblock %}
+
+{% block content %}
+<!-- Hero Header Banner with Background Image Overlay -->
+<section class="hero-section py-16 text-center text-white" style="background: linear-gradient(180deg, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.96) 100%), url('{% static 'images/trust_bg.png' %}') center/cover no-repeat;">
+  <div class="container container-md">
+    <div class="inline-flex p-3 px-4 rounded-full bg-primary-alpha-10 text-indigo-300 font-semibold text-xs mb-4 border border-indigo-400/30">
+      <i data-lucide="shield-check" class="w-4 h-4 text-indigo-400"></i>
+      <span>Our Mission</span>
+    </div>
+    <h1 class="text-4xl font-extrabold mb-4 text-white">Replacing Star Ratings with Proof</h1>
+    <p class="text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed">
+      VeriPoint was built on a simple premise: Online reviews should be backed by verifiable evidence, not unverified opinions or paid star ratings.
+    </p>
+  </div>
+</section>
+
+<div class="container container-md py-12">
+
+  <div class="grid grid-cols-2 gap-8 mb-12">
+    <div class="card p-6 shadow-md">
+      <h3 class="mb-3 text-primary font-bold text-xl">The Core Philosophy</h3>
+      <p class="text-sm text-muted mb-4 leading-relaxed">
+        Traditional star rating platforms reward hyperbole and manipulation. A single disgruntled user or a competitor can post a 1-star rating without ever setting foot in a store. Businesses buy 5-star reviews by the bundle.
+      </p>
+      <p class="text-sm text-muted leading-relaxed">
+        VeriPoint flips this equation: We prioritize <strong>evidence attachments</strong> (invoices, photos, receipts, documents) and weigh them algorithmically to construct an accurate <strong>Credibility Score</strong>.
+      </p>
+    </div>
+
+    <div class="card p-6 shadow-md">
+      <h3 class="mb-3 text-accent-dark font-bold text-xl">How Credibility Score Works</h3>
+      <ul class="flex flex-col gap-3 text-sm text-muted">
+        <li><strong>Evidence Weight (40%):</strong> Photos, invoices, receipts, and supporting documents attached to the review.</li>
+        <li><strong>Reviewer Reputation (20%):</strong> User's historical review quality and community trust tier.</li>
+        <li><strong>Community Audit (20%):</strong> Peer verification upvotes vs downvotes on uploaded evidence.</li>
+        <li><strong>Recency (10%):</strong> Time decay ensuring scores represent current service quality.</li>
+        <li><strong>Business Engagement (10%):</strong> Active dialogue and official business responses.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card p-8 bg-subtle text-center shadow-lg border-primary">
+    <h2 class="mb-3 text-2xl font-bold">Ready to test evidence-based trust?</h2>
+    <p class="text-muted mb-6 text-sm">Join reviewers and businesses building a transparent review ecosystem in India.</p>
+    <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg font-bold">Create Free Account &rarr;</a>
+  </div>
+</div>
+{% endblock %}

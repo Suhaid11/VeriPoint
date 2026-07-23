@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Notifications — VeriPoint{% endblock %}
+
+{% block content %}
+<div class="container container-md py-8">
+
+  <!-- Header & Actions -->
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-extrabold mb-1">Notifications Feed</h1>
+      <p class="text-sm text-muted">Stay updated on reviews, evidence verifications, votes, and comments.</p>
+    </div>
+    {% if notifications %}
+      <button id="mark-all-read-btn" class="btn btn-secondary btn-sm">
+        <i data-lucide="check-check" class="w-4 h-4"></i> Mark All as Read
+      </button>
+    {% endif %}
+  </div>
+
+  <!-- Notifications Feed -->
+  <div class="flex flex-col gap-3">
+    {% for n in notifications %}
+      <div class="card p-4 flex items-center justify-between {% if not n.is_read %}bg-primary-subtle border-primary{% endif %}" id="notification-item-{{ n.id }}">
+        <div class="flex items-center gap-4">
+          <div class="p-3 rounded-full bg-surface text-primary">
+            {% if n.notification_type == 'review' %}<i data-lucide="file-text" class="w-5 h-5"></i>
+            {% elif n.notification_type == 'comment' %}<i data-lucide="message-square" class="w-5 h-5"></i>
+            {% elif n.notification_type == 'vote' %}<i data-lucide="thumbs-up" class="w-5 h-5"></i>
+            {% elif n.notification_type == 'verification' %}<i data-lucide="shield-check" class="w-5 h-5 text-accent"></i>
+            {% else %}<i data-lucide="bell" class="w-5 h-5"></i>
+            {% endif %}
+          </div>
+
+          <div>
+            <div class="text-sm font-semibold text-main mb-1">
+              {% if n.actor %}
+                <a href="{% url 'accounts:profile' username=n.actor.username %}" class="text-primary">@{{ n.actor.username }}</a>
+              {% else %}
+                <span>System</span>
+              {% endif %}
+              <span class="font-normal text-muted">{{ n.verb }}</span>
+            </div>
+            <div class="text-xs text-muted">{{ n.created_at|short_timesince }}</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          {% if n.target_type == 'review' and n.target_id %}
+            <a href="{% url 'reviews:detail' pk=n.target_id %}" class="btn btn-outline btn-xs">View Review &rarr;</a>
+          {% endif %}
+
+          {% if not n.is_read %}
+            <button class="btn btn-secondary btn-xs btn-mark-read" data-id="{{ n.id }}" title="Mark Read">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    {% empty %}
+      {% include 'components/empty_state.html' with icon="bell-off" title="No Notifications" message="You have no notifications yet. Activity on your reviews and business listings will show up here." %}
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% include 'components/pagination.html' %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Single Mark Read
+    document.querySelectorAll('.btn-mark-read').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        const csrfToken = getCsrfToken();
+        try {
+          const res = await fetch(`/notifications/${id}/read/`, {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrfToken }
+          });
+          if (res.ok) {
+            const item = document.getElementById(`notification-item-${id}`);
+            if (item) {
+              item.classList.remove('bg-primary-subtle', 'border-primary');
+              btn.remove();
+            }
+          }
+        } catch(err) { console.error(err); }
+      });
+    });
+
+    // Mark All Read
+    const markAllBtn = document.getElementById('mark-all-read-btn');
+    if (markAllBtn) {
+      markAllBtn.addEventListener('click', async () => {
+        const csrfToken = getCsrfToken();
+        try {
+          const res = await fetch('/notifications/read-all/', {
+            method: 'POST',
+            headers: { 'X-CSRFToken': csrfToken }
+          });
+          if (res.ok) {
+            showToast('All notifications marked as read', 'success');
+            setTimeout(() => window.location.reload(), 800);
+          }
+        } catch(err) { console.error(err); }
+      });
+    }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load veripoint_tags %}
+
+{% block title %}Audit Logs — VeriPoint Platform Moderation{% endblock %}
+
+{% block content %}
+<div class="container container-md py-8">
+
+  <div class="mb-6 flex justify-between items-center">
+    <div>
+      <a href="{% url 'moderation:dashboard' %}" class="text-xs text-muted font-semibold hover:text-primary">&larr; Back to Admin Console</a>
+      <h1 class="text-3xl font-extrabold mt-1">Audit Log History</h1>
+    </div>
+    <span class="text-xs text-muted">Immutable system audit trail</span>
+  </div>
+
+  <div class="card p-6">
+    <table class="w-full text-left border-collapse" style="font-size: var(--font-sm);">
+      <thead>
+        <tr class="border-b border-subtle text-xs text-muted font-bold uppercase">
+          <th class="py-3 px-4">Timestamp</th>
+          <th class="py-3 px-4">Actor</th>
+          <th class="py-3 px-4">Action</th>
+          <th class="py-3 px-4">Target Model</th>
+          <th class="py-3 px-4">Object ID</th>
+          <th class="py-3 px-4 text-right">IP Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in audit_logs %}
+          <tr class="border-b border-subtle hover:bg-subtle transition-colors">
+            <td class="py-3.5 px-4 text-xs text-muted">{{ log.created_at|date:"Y-m-d H:i:s" }}</td>
+            <td class="py-3.5 px-4 font-semibold text-main">{{ log.user.username|default:"System" }}</td>
+            <td class="py-3.5 px-4">
+              <span class="badge badge-primary uppercase">{{ log.action }}</span>
+            </td>
+            <td class="py-3.5 px-4 font-mono text-xs">{{ log.model_name }}</td>
+            <td class="py-3.5 px-4 font-mono text-xs">#{{ log.object_id }}</td>
+            <td class="py-3.5 px-4 text-right font-mono text-xs text-muted">{{ log.ip_address|default:"127.0.0.1" }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="6" class="text-center py-6 text-muted">No audit logs recorded yet.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    {% include 'components/pagination.html' %}
+  </div>
+
+</div>
+{% endblock %}
