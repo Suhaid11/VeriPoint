@@ -1,60 +1,40 @@
 /**
- * VeriPoint — Main JavaScript Engine
+ * VeriPoint — Main Application JavaScript
+ * Single light theme. No dark mode.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initTheme();
-  initThemeToggle();
   initLucideIcons();
   initToasts();
   initVoteHandlers();
   initBookmarkHandlers();
 });
 
-/* --- Theme System --- */
-function initTheme() {
-  const savedTheme = localStorage.getItem('veripoint_theme');
-  if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  } else {
-    document.documentElement.setAttribute('data-theme', 'light');
-  }
-}
-
-function initThemeToggle() {
-  const toggleBtn = document.getElementById('theme-toggle-btn');
-  if (!toggleBtn) return;
-
-  toggleBtn.addEventListener('click', () => {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('veripoint_theme', newTheme);
-  });
-}
-
-/* --- Lucide Icons Auto-render --- */
+/* ==========================================================================
+   LUCIDE ICONS
+   ========================================================================== */
 function initLucideIcons() {
   if (window.lucide) {
     window.lucide.createIcons();
   }
 }
 
-/* --- Toast Auto-dismiss --- */
+/* ==========================================================================
+   TOAST AUTO-DISMISS
+   ========================================================================== */
 function initToasts() {
-  const toasts = document.querySelectorAll('.toast');
-  toasts.forEach((toast) => {
+  document.querySelectorAll('.toast').forEach((toast) => {
     setTimeout(() => {
       toast.style.opacity = '0';
       toast.style.transform = 'translateX(100%)';
-      setTimeout(() => toast.remove(), 300);
+      setTimeout(() => toast.remove(), 350);
     }, 5000);
   });
 }
 
-/* --- AJAX Voting --- */
+/* ==========================================================================
+   AJAX VOTING
+   ========================================================================== */
 function initVoteHandlers() {
   document.querySelectorAll('.btn-vote').forEach((btn) => {
     btn.addEventListener('click', async (e) => {
@@ -80,7 +60,6 @@ function initVoteHandlers() {
 
         if (response.ok) {
           const data = await response.json();
-          // Update vote UI
           const voteContainer = btn.closest('.vote-container');
           if (voteContainer) {
             const scoreEl = voteContainer.querySelector('.vote-score');
@@ -96,7 +75,9 @@ function initVoteHandlers() {
   });
 }
 
-/* --- AJAX Bookmarking --- */
+/* ==========================================================================
+   AJAX BOOKMARKING
+   ========================================================================== */
 function initBookmarkHandlers() {
   document.querySelectorAll('.btn-bookmark').forEach((btn) => {
     btn.addEventListener('click', async (e) => {
@@ -122,11 +103,14 @@ function initBookmarkHandlers() {
 
         if (response.ok) {
           const data = await response.json();
+          const spanEl = btn.querySelector('span');
           if (data.bookmarked) {
             btn.classList.add('bookmarked');
+            if (spanEl) spanEl.textContent = 'Saved';
             showToast('Saved to bookmarks', 'success');
           } else {
             btn.classList.remove('bookmarked');
+            if (spanEl) spanEl.textContent = 'Save Bookmark';
             showToast('Removed from bookmarks', 'info');
           }
         }
@@ -137,7 +121,9 @@ function initBookmarkHandlers() {
   });
 }
 
-/* --- Helpers --- */
+/* ==========================================================================
+   HELPERS
+   ========================================================================== */
 function getCsrfToken() {
   const cookie = document.cookie.split('; ').find(row => row.startsWith('csrftoken='));
   return cookie ? cookie.split('=')[1] : '';
@@ -148,16 +134,20 @@ function showToast(message, type = 'info') {
   if (!container) {
     container = document.createElement('div');
     container.className = 'toast-container';
+    container.setAttribute('role', 'alert');
+    container.setAttribute('aria-live', 'polite');
     document.body.appendChild(container);
   }
 
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
+  toast.setAttribute('role', 'status');
   toast.innerHTML = `<span>${message}</span>`;
   container.appendChild(toast);
 
   setTimeout(() => {
     toast.style.opacity = '0';
-    setTimeout(() => toast.remove(), 300);
-  }, 4000);
+    toast.style.transform = 'translateX(100%)';
+    setTimeout(() => toast.remove(), 350);
+  }, 4500);
 }

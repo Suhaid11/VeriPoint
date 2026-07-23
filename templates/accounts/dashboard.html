@@ -4,69 +4,74 @@
 {% block title %}Dashboard — VeriPoint{% endblock %}
 
 {% block content %}
+
+<!-- Page Header -->
+<div class="page-header">
+  <div class="container">
+    <div class="page-header-inner">
+      <div class="page-header-text">
+        <h1>Welcome back, {{ user.first_name|default:user.username }}</h1>
+        <p>Manage your proof-backed reviews, reputation, and notifications.</p>
+      </div>
+      <div class="flex gap-3 flex-wrap">
+        <a href="{% url 'businesses:list' %}" class="btn btn-secondary btn-sm">
+          <i data-lucide="plus-circle" class="w-4 h-4" aria-hidden="true"></i> Write a Review
+        </a>
+        <a href="{% url 'accounts:edit_profile' %}" class="btn btn-outline btn-sm">
+          <i data-lucide="user" class="w-4 h-4" aria-hidden="true"></i> Edit Profile
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="container py-8">
 
-  <!-- Welcome Header -->
-  <div class="flex justify-between items-center mb-8">
-    <div>
-      <h1 class="text-3xl font-extrabold mb-1">Welcome back, {{ user.first_name|default:user.username }}!</h1>
-      <p class="text-sm text-muted">Manage your proof-backed reviews, reputation, and notifications.</p>
-    </div>
-    <div class="flex gap-3">
-      <a href="{% url 'businesses:list' %}" class="btn btn-secondary btn-sm"><i data-lucide="plus-circle"></i> Write a Review</a>
-      <a href="{% url 'accounts:edit_profile' %}" class="btn btn-outline btn-sm"><i data-lucide="user"></i> Edit Profile</a>
-    </div>
-  </div>
-
-  <!-- Key Metrics Bar -->
-  <div class="grid grid-cols-4 gap-6 mb-8">
-    <!-- Reputation Card -->
+  <!-- Key Metrics Row -->
+  <div class="grid grid-cols-4 gap-5 mb-8">
     <div class="card p-5">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-xs text-muted font-semibold">REPUTATION SCORE</span>
+      <div class="flex justify-between items-start mb-3">
+        <span class="text-xs text-muted font-semibold uppercase tracking-wide">Reputation Score</span>
         <span class="badge {{ reputation.level|reputation_badge_color }}">{{ reputation.get_level_display }}</span>
       </div>
-      <div class="text-3xl font-extrabold text-primary">{{ reputation.score|default:0 }}</div>
-      <span class="text-xs text-muted mt-1 block">Tier calculated from verified evidence & votes</span>
+      <div class="text-3xl font-extrabold text-primary mb-1">{{ reputation.score|default:0 }}</div>
+      <p class="text-xs text-muted">Tier from verified evidence &amp; votes</p>
     </div>
 
-    <!-- Review Count -->
     <div class="card p-5">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-xs text-muted font-semibold">TOTAL REVIEWS</span>
-        <i data-lucide="file-text" class="text-muted w-4 h-4"></i>
+      <div class="flex justify-between items-start mb-3">
+        <span class="text-xs text-muted font-semibold uppercase tracking-wide">Total Reviews</span>
+        <i data-lucide="file-text" class="w-4 h-4 text-muted" aria-hidden="true"></i>
       </div>
-      <div class="text-3xl font-extrabold text-main">{{ review_count }}</div>
-      <span class="text-xs text-muted mt-1 block">Published evidence-backed reviews</span>
+      <div class="text-3xl font-extrabold text-main mb-1">{{ review_count }}</div>
+      <p class="text-xs text-muted">Published evidence-backed reviews</p>
     </div>
 
-    <!-- Evidence Uploads -->
     <div class="card p-5">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-xs text-muted font-semibold">ATTACHED EVIDENCE</span>
-        <i data-lucide="paperclip" class="text-accent w-4 h-4"></i>
+      <div class="flex justify-between items-start mb-3">
+        <span class="text-xs text-muted font-semibold uppercase tracking-wide">Attached Evidence</span>
+        <i data-lucide="paperclip" class="w-4 h-4 text-accent" aria-hidden="true"></i>
       </div>
-      <div class="text-3xl font-extrabold text-accent-dark">{{ reputation.total_evidence|default:0 }}</div>
-      <span class="text-xs text-muted mt-1 block">Invoices, receipts & photo attachments</span>
+      <div class="text-3xl font-extrabold text-accent-dark mb-1">{{ reputation.total_evidence|default:0 }}</div>
+      <p class="text-xs text-muted">Invoices, receipts &amp; photos</p>
     </div>
 
-    <!-- Helpful Votes -->
     <div class="card p-5">
-      <div class="flex justify-between items-start mb-2">
-        <span class="text-xs text-muted font-semibold">HELPFUL VOTES</span>
-        <i data-lucide="thumbs-up" class="text-success w-4 h-4"></i>
+      <div class="flex justify-between items-start mb-3">
+        <span class="text-xs text-muted font-semibold uppercase tracking-wide">Helpful Votes</span>
+        <i data-lucide="thumbs-up" class="w-4 h-4 text-success" aria-hidden="true"></i>
       </div>
-      <div class="text-3xl font-extrabold text-success">{{ reputation.total_helpful_votes|default:0 }}</div>
-      <span class="text-xs text-muted mt-1 block">Upvotes received from community</span>
+      <div class="text-3xl font-extrabold text-success mb-1">{{ reputation.total_helpful_votes|default:0 }}</div>
+      <p class="text-xs text-muted">Upvotes from the community</p>
     </div>
   </div>
 
-  <!-- Business Owner Section (If Applicable) -->
+  <!-- Business Owner Panel -->
   {% if owned_businesses %}
     <div class="card p-6 mb-8 border-primary bg-primary-subtle">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="flex items-center gap-2 text-primary">
-          <i data-lucide="briefcase"></i> My Managed Businesses
+        <h3 class="flex items-center gap-2 text-primary font-bold">
+          <i data-lucide="briefcase" class="w-5 h-5" aria-hidden="true"></i> My Managed Businesses
         </h3>
         <a href="{% url 'businesses:create' %}" class="btn btn-primary btn-sm">+ Add Business</a>
       </div>
@@ -75,10 +80,10 @@
           <div class="card p-4 bg-surface">
             <div class="flex justify-between items-center">
               <div>
-                <h4 class="mb-1"><a href="{% url 'businesses:detail' slug=b.slug %}">{{ b.name }}</a></h4>
+                <h4 class="text-base font-bold mb-1"><a href="{% url 'businesses:detail' slug=b.slug %}">{{ b.name }}</a></h4>
                 <span class="text-xs text-muted">{{ b.city }} &bull; {{ b.review_count }} review{{ b.review_count|pluralize }}</span>
               </div>
-              <a href="{% url 'businesses:edit' slug=b.slug %}" class="btn btn-secondary btn-sm">Edit Listing</a>
+              <a href="{% url 'businesses:edit' slug=b.slug %}" class="btn btn-secondary btn-sm">Edit</a>
             </div>
           </div>
         {% endfor %}
@@ -86,74 +91,125 @@
     </div>
   {% endif %}
 
-  <!-- Layout: Recent Reviews & Notifications -->
-  <div class="layout-with-sidebar">
+  <!-- Main 70/30 Layout -->
+  <div class="layout-sidebar-right">
+
     <!-- Main Column: Recent Reviews -->
     <div>
-      <div class="flex justify-between items-center mb-4">
-        <h3>My Recent Reviews</h3>
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-xl font-bold">My Recent Reviews</h3>
         <a href="{% url 'accounts:profile' username=user.username %}" class="text-xs text-primary font-semibold">View Public Profile &rarr;</a>
       </div>
 
       <div class="flex flex-col gap-4">
         {% for r in recent_reviews %}
           <div class="card p-5">
-            <div class="flex justify-between items-start mb-2">
-              <div>
-                <span class="text-xs text-muted">Review for <a href="{% url 'businesses:detail' slug=r.business.slug %}" class="font-bold text-primary">{{ r.business.name }}</a></span>
-                <h4 class="mt-1"><a href="{% url 'reviews:detail' pk=r.pk %}">{{ r.title }}</a></h4>
+            <div class="flex justify-between items-start mb-3">
+              <div class="flex-1 min-w-0 mr-4">
+                <span class="text-xs text-muted mb-1 block">Review for <a href="{% url 'businesses:detail' slug=r.business.slug %}" class="font-bold text-primary">{{ r.business.name }}</a></span>
+                <h4 class="text-base font-bold"><a href="{% url 'reviews:detail' pk=r.pk %}">{{ r.title }}</a></h4>
               </div>
               {% if r.trust_score %}
-                <div class="trust-score-badge {{ r.trust_score.total_score|trust_score_color }}">
+                <div class="trust-score-badge {{ r.trust_score.total_score|trust_score_color }} flex-shrink-0">
                   Score {{ r.trust_score.total_score }}
                 </div>
               {% endif %}
             </div>
 
-            <p class="text-sm text-muted mb-3 line-clamp-2">{{ r.body }}</p>
+            <p class="text-sm text-muted mb-4 line-clamp-2">{{ r.body }}</p>
 
-            <div class="flex items-center justify-between card-footer pt-3 mt-0">
-              <div class="flex gap-2">
+            <div class="card-footer">
+              <div class="flex gap-2 flex-wrap">
                 {% for item in r.evidence_items.all %}
                   {% include 'components/evidence_badge.html' with evidence=item %}
                 {% endfor %}
               </div>
-              <span class="text-xs text-muted">{{ r.created_at|short_timesince }}</span>
+              <span class="text-xs text-muted flex-shrink-0">{{ r.created_at|short_timesince }}</span>
             </div>
           </div>
         {% empty %}
-          {% include 'components/empty_state.html' with title="No Reviews Written Yet" message="Search for a business you visited and share your evidence-backed review." action_url="/businesses/" action_text="Browse Businesses" %}
+          {% include 'components/empty_state.html' with icon="file-text" title="No Reviews Written Yet" message="Search for a business you visited and share your evidence-backed review." action_url="/businesses/" action_text="Browse Businesses" %}
         {% endfor %}
       </div>
     </div>
 
-    <!-- Sidebar: Quick Links & Unread Notifications -->
-    <div class="flex flex-col gap-6">
+    <!-- Sidebar -->
+    <div class="flex flex-col gap-5">
+
+      <!-- Profile Quick Info -->
       <div class="card p-5">
-        <h4 class="mb-4">Quick Navigation</h4>
-        <ul class="flex flex-col gap-3 text-sm">
-          <li><a href="{% url 'community:bookmarks' %}" class="flex items-center gap-2 text-main"><i data-lucide="bookmark" class="w-4 h-4 text-primary"></i> Saved Bookmarks</a></li>
-          <li><a href="{% url 'notifications:list' %}" class="flex items-center gap-2 text-main"><i data-lucide="bell" class="w-4 h-4 text-primary"></i> Notifications Feed</a></li>
-          <li><a href="{% url 'accounts:settings' %}" class="flex items-center gap-2 text-main"><i data-lucide="settings" class="w-4 h-4 text-primary"></i> Account Settings</a></li>
-          <li><a href="{% url 'reviews:leaderboard' %}" class="flex items-center gap-2 text-main"><i data-lucide="trophy" class="w-4 h-4 text-primary"></i> Reviewer Leaderboard</a></li>
+        <div class="flex items-center gap-3 mb-4">
+          <div style="width:44px;height:44px;border-radius:var(--radius-full);background:var(--primary-alpha-10);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;color:var(--primary);flex-shrink:0;" aria-label="{{ user.username }} avatar">
+            {% if user.profile.avatar %}
+              <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">
+            {% else %}
+              {{ user.username|slice:":1"|upper }}
+            {% endif %}
+          </div>
+          <div class="min-w-0">
+            <div class="font-bold text-sm truncate">{{ user.first_name }} {{ user.last_name }}</div>
+            <div class="text-xs text-muted truncate">@{{ user.username }}</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 mb-4">
+          <span class="badge {{ reputation.level|reputation_badge_color }}">{{ reputation.get_level_display }}</span>
+          <span class="text-xs text-muted">{{ reputation.score|default:0 }} pts</span>
+        </div>
+        <a href="{% url 'accounts:profile' username=user.username %}" class="btn btn-secondary btn-sm w-full">View Public Profile</a>
+      </div>
+
+      <!-- Quick Navigation -->
+      <div class="card p-5">
+        <h4 class="text-sm font-bold mb-4">Quick Links</h4>
+        <ul class="space-y-3">
+          <li>
+            <a href="{% url 'community:bookmarks' %}" class="flex items-center gap-3 text-sm text-main hover:text-primary transition-colors">
+              <i data-lucide="bookmark" class="w-4 h-4 text-primary flex-shrink-0" aria-hidden="true"></i>
+              Saved Bookmarks
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'notifications:list' %}" class="flex items-center gap-3 text-sm text-main hover:text-primary transition-colors">
+              <i data-lucide="bell" class="w-4 h-4 text-primary flex-shrink-0" aria-hidden="true"></i>
+              Notifications Feed
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'accounts:settings' %}" class="flex items-center gap-3 text-sm text-main hover:text-primary transition-colors">
+              <i data-lucide="settings" class="w-4 h-4 text-primary flex-shrink-0" aria-hidden="true"></i>
+              Account Settings
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'reviews:leaderboard' %}" class="flex items-center gap-3 text-sm text-main hover:text-primary transition-colors">
+              <i data-lucide="trophy" class="w-4 h-4 text-primary flex-shrink-0" aria-hidden="true"></i>
+              Reviewer Leaderboard
+            </a>
+          </li>
         </ul>
       </div>
 
+      <!-- Recent Notifications -->
       <div class="card p-5">
-        <h4 class="mb-4">Recent Notifications</h4>
+        <div class="flex justify-between items-center mb-4">
+          <h4 class="text-sm font-bold">Notifications</h4>
+          <a href="{% url 'notifications:list' %}" class="text-xs text-primary font-semibold">View all &rarr;</a>
+        </div>
         <div class="flex flex-col gap-3">
           {% for n in recent_notifications %}
-            <div class="text-xs pb-2 border-b border-subtle">
-              <div class="font-medium text-main mb-1">
-                <strong>{{ n.actor.username|default:"System" }}</strong> {{ n.verb }}
+            <div class="pb-3 border-b border-subtle">
+              <div class="text-xs font-semibold text-main mb-1">
+                <strong>{{ n.actor.username|default:"System" }}</strong>
+                <span class="font-normal text-muted"> {{ n.verb }}</span>
               </div>
-              <span class="text-muted">{{ n.created_at|short_timesince }}</span>
+              <span class="text-xs text-muted">{{ n.created_at|short_timesince }}</span>
             </div>
           {% empty %}
-            <div class="text-xs text-muted text-center py-3">No unread notifications.</div>
+            <p class="text-xs text-muted text-center py-2">No recent notifications.</p>
           {% endfor %}
         </div>
       </div>
+
     </div>
   </div>
 

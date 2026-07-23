@@ -1,18 +1,18 @@
 {% load static veripoint_tags %}
-<header class="navbar">
+<header class="navbar" role="banner">
   <div class="navbar-container">
-    
-    <!-- Brand Logo & Title -->
-    <a href="{% url 'core:landing' %}" class="navbar-brand">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- Brand -->
+    <a href="{% url 'core:landing' %}" class="navbar-brand" aria-label="VeriPoint Home">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         <path d="m9 12 2 2 4-4"/>
       </svg>
       <span>VeriPoint</span>
     </a>
 
-    <!-- Desktop Navigation Links (Horizontal Row, No Wrapping) -->
-    <nav class="hidden-mobile">
+    <!-- Desktop Navigation -->
+    <nav aria-label="Main navigation" class="hidden-mobile">
       <ul class="navbar-nav">
         <li><a href="{% url 'businesses:list' %}" class="nav-link {% active_nav request 'list' %}">Explore</a></li>
         <li><a href="{% url 'businesses:categories' %}" class="nav-link {% active_nav request 'categories' %}">Categories</a></li>
@@ -21,71 +21,60 @@
       </ul>
     </nav>
 
-    <!-- Desktop Action Buttons -->
+    <!-- Desktop Actions -->
     <div class="hidden-mobile flex items-center gap-3">
-      <button id="theme-toggle-btn" class="btn btn-secondary btn-icon" title="Toggle Theme" aria-label="Toggle Dark/Light Mode">
-        <i data-lucide="sun" class="sun-icon"></i>
-        <i data-lucide="moon" class="moon-icon"></i>
-      </button>
-
       {% if user.is_authenticated %}
-        <a href="{% url 'notifications:list' %}" class="btn btn-secondary btn-icon relative" title="Notifications">
-          <i data-lucide="bell"></i>
+        <a href="{% url 'notifications:list' %}" class="btn btn-secondary btn-icon relative" title="Notifications" aria-label="Notifications">
+          <i data-lucide="bell" class="w-4 h-4" aria-hidden="true"></i>
           {% if unread_notification_count > 0 %}
-            <span class="badge badge-danger text-xs absolute" style="top: -4px; right: -4px; padding: 2px 6px;">{{ unread_notification_count }}</span>
+            <span class="badge badge-danger" style="position:absolute;top:-4px;right:-4px;padding:2px 6px;font-size:10px;line-height:1.4;" aria-label="{{ unread_notification_count }} unread notifications">{{ unread_notification_count }}</span>
           {% endif %}
         </a>
-
-        <div class="user-menu flex items-center gap-2">
-          <a href="{% url 'accounts:dashboard' %}" class="btn btn-primary btn-sm font-bold">Dashboard</a>
-          <a href="{% url 'accounts:logout' %}" class="btn btn-secondary btn-sm">Logout</a>
-        </div>
+        <a href="{% url 'accounts:dashboard' %}" class="btn btn-primary btn-sm font-semibold">Dashboard</a>
+        <a href="{% url 'accounts:logout' %}" class="btn btn-secondary btn-sm">Logout</a>
       {% else %}
         <a href="{% url 'accounts:login' %}" class="btn btn-secondary btn-sm font-semibold">Log in</a>
-        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm font-bold">Sign up</a>
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm font-semibold">Sign up free</a>
       {% endif %}
     </div>
 
-    <!-- Mobile Hamburger Toggle Button -->
+    <!-- Mobile Toggle -->
     <div class="mobile-toggle-wrapper">
-      <button id="theme-toggle-mobile" class="btn btn-secondary btn-icon mr-2" title="Toggle Theme" aria-label="Toggle Dark/Light Mode">
-        <i data-lucide="moon"></i>
-      </button>
-      <button type="button" onclick="toggleMobileMenu()" class="btn btn-secondary btn-icon" aria-label="Open Navigation Menu">
-        <i data-lucide="menu" id="menuOpenIcon" class="w-5 h-5"></i>
-        <i data-lucide="x" id="menuCloseIcon" class="w-5 h-5 hidden"></i>
+      <button type="button" onclick="toggleMobileMenu()" class="btn btn-secondary btn-icon" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileNavDrawer" id="mobileMenuBtn">
+        <i data-lucide="menu" id="menuOpenIcon" class="w-5 h-5" aria-hidden="true"></i>
+        <i data-lucide="x" id="menuCloseIcon" class="w-5 h-5 hidden" aria-hidden="true"></i>
       </button>
     </div>
 
   </div>
 
-  <!-- Mobile Dropdown Drawer Container -->
-  <div id="mobileNavDrawer" class="mobile-nav-drawer hidden">
-    <nav class="flex flex-col gap-3 p-5 bg-surface border-b border-subtle shadow-xl">
-      <a href="{% url 'businesses:list' %}" class="nav-link text-base py-2 border-b border-subtle flex items-center justify-between">
+  <!-- Mobile Drawer -->
+  <div id="mobileNavDrawer" class="mobile-nav-drawer hidden" role="navigation" aria-label="Mobile navigation">
+    <nav class="flex flex-col gap-3 p-5">
+      <a href="{% url 'businesses:list' %}" class="nav-link text-md py-2 border-b border-subtle flex items-center justify-between">
         <span>Explore Businesses</span>
-        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        <i data-lucide="chevron-right" class="w-4 h-4" aria-hidden="true"></i>
       </a>
-      <a href="{% url 'businesses:categories' %}" class="nav-link text-base py-2 border-b border-subtle flex items-center justify-between">
+      <a href="{% url 'businesses:categories' %}" class="nav-link text-md py-2 border-b border-subtle flex items-center justify-between">
         <span>Categories</span>
-        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        <i data-lucide="chevron-right" class="w-4 h-4" aria-hidden="true"></i>
       </a>
-      <a href="{% url 'reviews:leaderboard' %}" class="nav-link text-base py-2 border-b border-subtle flex items-center justify-between">
+      <a href="{% url 'reviews:leaderboard' %}" class="nav-link text-md py-2 border-b border-subtle flex items-center justify-between">
         <span>Leaderboard</span>
-        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        <i data-lucide="chevron-right" class="w-4 h-4" aria-hidden="true"></i>
       </a>
-      <a href="{% url 'core:about' %}" class="nav-link text-base py-2 border-b border-subtle flex items-center justify-between">
+      <a href="{% url 'core:about' %}" class="nav-link text-md py-2 border-b border-subtle flex items-center justify-between">
         <span>About VeriPoint</span>
-        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        <i data-lucide="chevron-right" class="w-4 h-4" aria-hidden="true"></i>
       </a>
 
-      <div class="pt-3 flex flex-col gap-2.5">
+      <div class="pt-3 flex flex-col gap-3">
         {% if user.is_authenticated %}
-          <a href="{% url 'accounts:dashboard' %}" class="btn btn-primary btn-md w-full font-bold">Go to Dashboard &rarr;</a>
+          <a href="{% url 'accounts:dashboard' %}" class="btn btn-primary btn-md w-full font-semibold">Dashboard</a>
           <a href="{% url 'accounts:logout' %}" class="btn btn-secondary btn-md w-full text-center">Logout</a>
         {% else %}
-          <a href="{% url 'accounts:login' %}" class="btn btn-secondary btn-md w-full text-center font-bold">Log In</a>
-          <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-md w-full font-bold">Sign Up &rarr;</a>
+          <a href="{% url 'accounts:login' %}" class="btn btn-secondary btn-md w-full text-center font-semibold">Log in</a>
+          <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-md w-full font-semibold">Sign up free</a>
         {% endif %}
       </div>
     </nav>
@@ -97,15 +86,12 @@ function toggleMobileMenu() {
   const drawer = document.getElementById('mobileNavDrawer');
   const openIcon = document.getElementById('menuOpenIcon');
   const closeIcon = document.getElementById('menuCloseIcon');
-  
-  if (drawer.classList.contains('hidden')) {
-    drawer.classList.remove('hidden');
-    openIcon.classList.add('hidden');
-    closeIcon.classList.remove('hidden');
-  } else {
-    drawer.classList.add('hidden');
-    openIcon.classList.remove('hidden');
-    closeIcon.classList.add('hidden');
-  }
+  const btn = document.getElementById('mobileMenuBtn');
+  const isOpen = !drawer.classList.contains('hidden');
+
+  drawer.classList.toggle('hidden');
+  openIcon.classList.toggle('hidden', isOpen);
+  closeIcon.classList.toggle('hidden', !isOpen);
+  btn.setAttribute('aria-expanded', String(!isOpen));
 }
 </script>

@@ -6,154 +6,174 @@
 {% block content %}
 <div class="saas-auth-wrapper">
 
-  <!-- Left Side: Brand Showcase & Statistics (55% Width) -->
-  <div class="saas-auth-left" style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(30, 27, 75, 0.96) 100%), url('{% static 'images/auth_bg.png' %}') center/cover no-repeat;">
-    
-    <!-- Top Brand Header -->
+  <!-- Left: Brand Panel -->
+  <div class="saas-auth-left" style="background: linear-gradient(145deg, rgba(15,23,42,0.95) 0%, rgba(30,27,75,0.97) 100%), url('{% static 'images/auth_bg.png' %}') center/cover no-repeat;">
+
     <div class="animate-fade-in-up">
-      <div class="flex items-center gap-3 mb-6">
-        <div class="p-2.5 rounded-2xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 shadow-md">
-          <i data-lucide="shield-check" class="w-7 h-7 text-indigo-400"></i>
+      <!-- Logo -->
+      <div class="flex items-center gap-3 mb-8">
+        <div style="padding:10px;border-radius:14px;background:rgba(99,102,241,0.2);border:1px solid rgba(129,140,248,0.3);">
+          <i data-lucide="shield-check" style="width:28px;height:28px;color:#818cf8;" aria-hidden="true"></i>
         </div>
         <div>
-          <span class="text-xl font-extrabold text-white tracking-tight block">VeriPoint</span>
-          <span class="text-xs text-indigo-300 font-semibold tracking-wider uppercase">Evidence-First Review Platform</span>
+          <span class="text-xl font-extrabold text-white block">VeriPoint</span>
+          <span class="text-xs font-semibold tracking-wider uppercase" style="color:#a5b4fc;">Evidence-First Reviews</span>
         </div>
       </div>
 
-      <h1 class="text-3xl sm:text-4xl font-extrabold mb-4 leading-tight tracking-tight" style="color: #ffffff !important;">
+      <h1 class="font-extrabold leading-tight mb-4" style="font-size:2.5rem;color:#ffffff;letter-spacing:-0.03em;">
         Verify Before<br>
-        <span style="color: #818cf8 !important;">You Trust.</span>
+        <span style="color:#818cf8;">You Trust.</span>
       </h1>
 
-      <p class="text-sm leading-relaxed mb-8 text-slate-300 max-w-md" style="color: #cbd5e1 !important;">
-        Join thousands of users making informed decisions through evidence-backed reviews instead of unreliable ratings.
+      <p class="text-sm leading-relaxed mb-10" style="color:#cbd5e1;max-width:380px;">
+        Join thousands making informed decisions through evidence-backed reviews instead of unreliable star ratings.
       </p>
 
-      <!-- 4 Statistics Cards Grid -->
-      <div class="grid grid-cols-2 gap-4 max-w-md mb-8">
+      <!-- Stats Grid -->
+      <div class="grid grid-cols-2 gap-4 mb-10" style="max-width:380px;">
         <div class="stat-card-mini">
-          <div class="text-xl sm:text-2xl font-extrabold text-white mb-1" style="color: #ffffff !important;">15,000+</div>
-          <div class="text-xs text-indigo-200 font-medium" style="color: #c7d2fe !important;">Verified Reviews</div>
+          <div class="font-extrabold text-white mb-1" style="font-size:1.5rem;">15,000+</div>
+          <div class="text-xs font-medium" style="color:#c7d2fe;">Verified Reviews</div>
         </div>
         <div class="stat-card-mini">
-          <div class="text-xl sm:text-2xl font-extrabold mb-1" style="color: #34d399 !important;">96%</div>
-          <div class="text-xs text-indigo-200 font-medium" style="color: #c7d2fe !important;">Evidence Accuracy</div>
+          <div class="font-extrabold mb-1" style="font-size:1.5rem;color:#34d399;">96%</div>
+          <div class="text-xs font-medium" style="color:#c7d2fe;">Evidence Accuracy</div>
         </div>
         <div class="stat-card-mini">
-          <div class="text-xl sm:text-2xl font-extrabold mb-1" style="color: #38bdf8 !important;">4,300+</div>
-          <div class="text-xs text-indigo-200 font-medium" style="color: #c7d2fe !important;">Verified Businesses</div>
+          <div class="font-extrabold mb-1" style="font-size:1.5rem;color:#38bdf8;">4,300+</div>
+          <div class="text-xs font-medium" style="color:#c7d2fe;">Verified Businesses</div>
         </div>
         <div class="stat-card-mini">
-          <div class="text-xl sm:text-2xl font-extrabold mb-1" style="color: #fbbf24 !important;">89%</div>
-          <div class="text-xs text-indigo-200 font-medium" style="color: #c7d2fe !important;">Community Trust Score</div>
+          <div class="font-extrabold mb-1" style="font-size:1.5rem;color:#fbbf24;">89%</div>
+          <div class="text-xs font-medium" style="color:#c7d2fe;">Community Trust Score</div>
         </div>
       </div>
     </div>
 
-    <!-- Bottom Footer Trust Note -->
-    <div class="pt-4 border-t border-white/15 text-xs flex items-center justify-between text-slate-400">
-      <span class="flex items-center gap-2" style="color: #cbd5e1 !important;">
-        <i data-lucide="lock" class="w-4 h-4 text-emerald-400"></i>
+    <!-- Footer note -->
+    <div class="pt-4 border-t flex items-center justify-between text-xs" style="border-color:rgba(255,255,255,0.15);color:#94a3b8;">
+      <span class="flex items-center gap-2">
+        <i data-lucide="lock" style="width:14px;height:14px;color:#34d399;" aria-hidden="true"></i>
         Protected by VeriPoint Algorithmic Engine
       </span>
-      <span class="font-bold text-white text-xs" style="color: #ffffff !important;">60+ Verified Evidence Uploads</span>
     </div>
   </div>
 
-  <!-- Right Side: Clean Modern Authentication Form (45% Width) -->
+  <!-- Right: Login Form -->
   <div class="saas-auth-right">
     <div class="saas-auth-card-inner animate-fade-in-up">
 
-      <!-- Header -->
-      <div class="mb-6">
-        <h2 class="text-2xl sm:text-3xl font-extrabold mb-1 text-main tracking-tight">Welcome Back</h2>
-        <p class="text-xs sm:text-sm text-muted">Sign in to your VeriPoint account.</p>
+      <div class="mb-7">
+        <h2 class="text-3xl font-extrabold mb-1 text-main tracking-tight">Welcome back</h2>
+        <p class="text-sm text-muted">Sign in to your VeriPoint account.</p>
       </div>
 
-      <!-- Main Login Form -->
-      <form method="POST" action="{% url 'accounts:login' %}" id="loginForm" onsubmit="handleFormSubmit(event)">
+      <!-- Error Messages -->
+      {% if form.non_field_errors %}
+        <div class="p-3 mb-5 rounded-lg bg-danger-bg border border-danger" role="alert">
+          {% for error in form.non_field_errors %}
+            <p class="text-xs font-semibold text-danger">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="POST" action="{% url 'accounts:login' %}" id="loginForm" novalidate>
         {% csrf_token %}
 
-        {% if form.non_field_errors %}
-          <div class="p-3 mb-4 rounded-xl bg-danger-bg text-danger text-xs font-semibold border border-danger">
-            {% for error in form.non_field_errors %}
-              <div>{{ error }}</div>
-            {% endfor %}
-          </div>
-        {% endif %}
-
-        <!-- Username or Email Field -->
+        <!-- Username -->
         <div class="form-group mb-4">
           <label class="form-label" for="id_username">Username or Email</label>
-          <input type="text" name="username" id="id_username" class="form-control" placeholder="e.g. ananya_sharma" required autofocus aria-required="true">
+          <input
+            type="text"
+            name="username"
+            id="id_username"
+            class="form-control"
+            placeholder="e.g. ananya_sharma"
+            autocomplete="username"
+            required
+            autofocus
+            aria-required="true"
+            {% if form.username.errors %}aria-invalid="true"{% endif %}>
           {% if form.username.errors %}
-            <div class="form-error">{{ form.username.errors.0 }}</div>
+            <span class="form-error" role="alert">{{ form.username.errors.0 }}</span>
           {% endif %}
         </div>
 
-        <!-- Password Field with Show/Hide Toggle -->
+        <!-- Password -->
         <div class="form-group mb-4">
-          <div class="flex justify-between items-center mb-1">
+          <div class="flex items-center justify-between mb-2">
             <label class="form-label mb-0" for="id_password">Password</label>
-            <a href="{% url 'accounts:password_reset' %}" class="text-xs font-semibold text-primary hover:underline">Forgot password?</a>
+            <a href="{% url 'accounts:password_reset' %}" class="text-xs font-semibold text-primary">Forgot password?</a>
           </div>
           <div class="relative flex items-center">
-            <input type="password" name="password" id="id_password" class="form-control pr-10" placeholder="••••••••" required aria-required="true">
-            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 text-muted hover:text-main focus:outline-none" title="Toggle Password Visibility" aria-label="Toggle Password Visibility">
-              <i data-lucide="eye" id="eyeIcon" class="w-4 h-4"></i>
+            <input
+              type="password"
+              name="password"
+              id="id_password"
+              class="form-control"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required
+              aria-required="true"
+              {% if form.password.errors %}aria-invalid="true"{% endif %}>
+            <button
+              type="button"
+              onclick="togglePasswordVisibility()"
+              class="absolute"
+              style="right:12px;background:none;border:none;color:var(--text-muted);cursor:pointer;"
+              aria-label="Toggle password visibility">
+              <i data-lucide="eye" id="eyeIcon" class="w-4 h-4" aria-hidden="true"></i>
             </button>
           </div>
           {% if form.password.errors %}
-            <div class="form-error">{{ form.password.errors.0 }}</div>
+            <span class="form-error" role="alert">{{ form.password.errors.0 }}</span>
           {% endif %}
         </div>
 
-        <!-- Remember Me Checkbox -->
-        <div class="flex items-center justify-between mb-5">
+        <!-- Remember Me -->
+        <div class="flex items-center mb-6">
           <label class="flex items-center gap-2 cursor-pointer text-xs font-medium text-muted">
-            <input type="checkbox" name="remember_me" class="rounded border-color text-primary focus:ring-primary">
+            <input type="checkbox" name="remember_me" aria-label="Remember me for 30 days">
             <span>Remember me for 30 days</span>
           </label>
         </div>
 
-        <!-- Submit Button -->
-        <button type="submit" id="submitBtn" class="btn btn-primary btn-lg w-full font-bold shadow-lg rounded-xl text-sm py-3" style="background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);">
-          <span id="btnText">Sign In &rarr;</span>
+        <!-- Submit -->
+        <button type="submit" id="submitBtn" class="btn btn-primary btn-lg w-full font-bold" style="background:linear-gradient(135deg,#4f46e5 0%,#3b82f6 100%);">
+          <span id="btnText">Sign In</span>
           <span id="btnSpinner" class="hidden flex items-center gap-2">
-            <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>
-            Signing In...
+            <i data-lucide="loader-2" class="w-4 h-4 animate-spin" aria-hidden="true"></i>
+            Signing In…
           </span>
         </button>
       </form>
 
-      <!-- Compact Trust Checklist Section (Below Submit Button) -->
+      <!-- Trust badges -->
       <div class="mt-6 pt-5 border-t border-subtle">
-        <div class="text-xs font-bold text-muted uppercase tracking-wider mb-2.5">Why VeriPoint?</div>
         <div class="grid grid-cols-2 gap-2 text-xs text-muted">
-          <div class="flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-500"></i> Secure Authentication</div>
-          <div class="flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-500"></i> Privacy Protected</div>
-          <div class="flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-500"></i> Evidence-backed Reviews</div>
-          <div class="flex items-center gap-1.5"><i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-500"></i> Community Verified Platform</div>
+          <div class="flex items-center gap-2">
+            <i data-lucide="check-circle-2" style="width:14px;height:14px;color:#16a34a;flex-shrink:0;" aria-hidden="true"></i>
+            <span>Secure Authentication</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i data-lucide="check-circle-2" style="width:14px;height:14px;color:#16a34a;flex-shrink:0;" aria-hidden="true"></i>
+            <span>Privacy Protected</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i data-lucide="check-circle-2" style="width:14px;height:14px;color:#16a34a;flex-shrink:0;" aria-hidden="true"></i>
+            <span>Evidence-backed Reviews</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i data-lucide="check-circle-2" style="width:14px;height:14px;color:#16a34a;flex-shrink:0;" aria-hidden="true"></i>
+            <span>Community Verified</span>
+          </div>
         </div>
       </div>
 
-      <!-- Collapsible Quick Demo Credentials Accordion -->
-      <details class="mt-4 p-3 rounded-xl bg-subtle border border-subtle">
-        <summary class="cursor-pointer text-xs font-bold text-muted uppercase tracking-wider select-none flex items-center justify-between">
-          <span>⚡ Quick 1-Click Demo Credentials</span>
-          <i data-lucide="chevron-down" class="w-4 h-4"></i>
-        </summary>
-        <div class="grid grid-cols-3 gap-2 mt-2 pt-2 border-t border-subtle">
-          <button type="button" onclick="fillCredentials('ananya_sharma', 'password123')" class="btn btn-secondary btn-sm text-xs font-bold py-1 px-1.5">Reviewer</button>
-          <button type="button" onclick="fillCredentials('dr_sangita_apollo', 'password123')" class="btn btn-secondary btn-sm text-xs font-bold py-1 px-1.5">Owner</button>
-          <button type="button" onclick="fillCredentials('admin', 'admin123')" class="btn btn-secondary btn-sm text-xs font-bold py-1.5">Admin</button>
-        </div>
-      </details>
-
       <!-- Sign Up Link -->
-      <div class="text-center pt-4 mt-4 border-t border-subtle text-xs text-muted">
-        Don't have an account? <a href="{% url 'accounts:register' %}" class="font-bold text-primary hover:underline">Create an account</a>
+      <div class="text-center pt-5 mt-5 border-t border-subtle">
+        <p class="text-xs text-muted">Don't have an account? <a href="{% url 'accounts:register' %}" class="font-bold text-primary">Create an account</a></p>
       </div>
 
     </div>
@@ -161,37 +181,24 @@
 
 </div>
 
-<!-- Interactive Scripts -->
 <script>
 function togglePasswordVisibility() {
-  const passwordInput = document.getElementById('id_password');
-  const eyeIcon = document.getElementById('eyeIcon');
-  if (passwordInput.type === 'password') {
-    passwordInput.type = 'text';
-    eyeIcon.setAttribute('data-lucide', 'eye-off');
+  const input = document.getElementById('id_password');
+  const icon  = document.getElementById('eyeIcon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.setAttribute('data-lucide', 'eye-off');
   } else {
-    passwordInput.type = 'password';
-    eyeIcon.setAttribute('data-lucide', 'eye');
+    input.type = 'password';
+    icon.setAttribute('data-lucide', 'eye');
   }
-  if (window.lucide) {
-    lucide.createIcons();
-  }
+  if (window.lucide) lucide.createIcons();
 }
 
-function fillCredentials(user, pass) {
-  document.getElementById('id_username').value = user;
-  document.getElementById('id_password').value = pass;
-  document.getElementById('loginForm').submit();
-}
-
-function handleFormSubmit(e) {
-  const btnText = document.getElementById('btnText');
-  const btnSpinner = document.getElementById('btnSpinner');
-  const submitBtn = document.getElementById('submitBtn');
-  
-  btnText.classList.add('hidden');
-  btnSpinner.classList.remove('hidden');
-  submitBtn.disabled = true;
-}
+document.getElementById('loginForm').addEventListener('submit', function() {
+  document.getElementById('btnText').classList.add('hidden');
+  document.getElementById('btnSpinner').classList.remove('hidden');
+  document.getElementById('submitBtn').disabled = true;
+});
 </script>
 {% endblock %}
